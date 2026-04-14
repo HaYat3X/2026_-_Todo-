@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Todoアプリ開発ハッカソン - 研修生向け</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: sans-serif;
+        background: #fafaf8;
+        color: #1a1a1a;
+        min-height: 100vh;
+        padding: 48px 24px;
+      }
+      .container {
+        max-width: 680px;
+        margin: 0 auto;
+      }
+
+      .header {
+        margin-bottom: 48px;
+      }
+      .header-label {
+        font-size: 0.75rem;
+        color: #aaa;
+        margin-bottom: 10px;
+        letter-spacing: 0.05em;
+      }
+      .header h1 {
+        font-size: 1.65rem;
+        font-weight: 700;
+        line-height: 1.35;
+        margin-bottom: 6px;
+      }
+      .header-sub {
+        font-size: 0.88rem;
+        color: #888;
+      }
+
+      .section {
+        margin-bottom: 44px;
+      }
+      h2 {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      h2::before {
+        content: "";
+        display: inline-block;
+        width: 4px;
+        height: 1em;
+        background: #1a1a1a;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+
+      p {
+        font-size: 0.92rem;
+        line-height: 1.85;
+        margin-bottom: 12px;
+        color: #444;
+      }
+
+      .what-box {
+        background: #fff;
+        border: 1px solid #ebebeb;
+        border-radius: 8px;
+        padding: 20px 22px;
+      }
+      .what-box p {
+        margin-bottom: 8px;
+      }
+      .what-box p:last-child {
+        margin-bottom: 0;
+      }
+
+      .pre-box {
+        background: #fffbe6;
+        border: 1px solid #f0e08a;
+        border-radius: 8px;
+        padding: 16px 20px;
+        margin-bottom: 0;
+      }
+      .pre-box-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #a07800;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .pre-box p {
+        font-size: 0.88rem;
+        color: #5a4400;
+        margin-bottom: 0;
+        line-height: 1.75;
+      }
+
+      .tl {
+        padding-left: 16px;
+        border-left: 2px solid #e0e0e0;
+      }
+      .tl-row {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0ee;
+      }
+      .tl-row:last-child {
+        border-bottom: none;
+      }
+      .tl-time {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #888;
+        min-width: 48px;
+        padding-top: 1px;
+      }
+      .tl-body {
+        flex: 1;
+      }
+      .tl-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+      .tl-desc {
+        font-size: 0.82rem;
+        color: #777;
+        line-height: 1.6;
+      }
+      .tl-row-break .tl-title {
+        color: #bbb;
+        font-weight: 400;
+      }
+
+      .step-list {
+        display: grid;
+        gap: 8px;
+      }
+      .step-item {
+        display: grid;
+        grid-template-columns: 56px 1fr;
+        border: 1px solid #ebebeb;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #fff;
+      }
+      .step-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #fff;
+        padding: 12px 8px;
+        text-align: center;
+        line-height: 1.4;
+      }
+      .step-badge-1 {
+        background: #1a1a1a;
+      }
+      .step-badge-2 {
+        background: #888;
+      }
+      .step-badge-3 {
+        background: #bbb;
+      }
+      .step-body {
+        padding: 14px 16px;
+      }
+      .step-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 3px;
+      }
+      .step-desc {
+        font-size: 0.82rem;
+        color: #777;
+        line-height: 1.6;
+      }
+      .step-link {
+        font-size: 0.8rem;
+        color: #1a1a1a;
+        margin-top: 6px;
+        display: inline-block;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .team-box {
+        background: #fff;
+        border: 1px solid #ebebeb;
+        border-radius: 8px;
+        padding: 18px 22px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px 24px;
+      }
+      .team-item {
+        font-size: 0.88rem;
+        color: #444;
+        line-height: 1.7;
+      }
+      .team-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #aaa;
+        margin-bottom: 2px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .mindset-list {
+        display: grid;
+        gap: 10px;
+      }
+      .mindset-item {
+        background: #fff;
+        border: 1px solid #ebebeb;
+        border-radius: 8px;
+        padding: 16px 20px;
+        font-size: 0.9rem;
+        line-height: 1.8;
+        color: #444;
+      }
+      .mindset-item strong {
+        color: #1a1a1a;
+      }
+
+      .footer {
+        font-size: 0.75rem;
+        color: #bbb;
+        text-align: center;
+        margin-top: 52px;
+        padding-top: 20px;
+        border-top: 1px solid #ebebeb;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="header-label">研修生向け ／ 当日配布</div>
+        <h1>Todoアプリ開発ハッカソン</h1>
+        <div class="header-sub">新人研修 ／ 1日（約8時間）</div>
+      </div>
+
+      <div class="section">
+        <h2>ハッカソンってなに？</h2>
+        <div class="what-box">
+          <p>
+            チームを組んで、決められた時間の中で集中的にソフトウェアを開発するイベントです。
+          </p>
+          <p>
+            今日は競い合うというより、<strong>チームで協力して課題に取り組む</strong>日です。完成度よりも、考えて動いたプロセスを大事にします。
+          </p>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>今日の流れ</h2>
+        <div class="tl">
+          <div class="tl-row">
+            <div class="tl-time">10:00</div>
+            <div class="tl-body">
+              <div class="tl-title">① 全体説明</div>
+              <div class="tl-desc">
+                自己紹介・ハッカソンとは・ルール共有（30分）
+              </div>
+            </div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-time">10:30</div>
+            <div class="tl-body">
+              <div class="tl-title">② Git解説 / 課題共有・セットアップ</div>
+              <div class="tl-desc">
+                Git概念とコマンド解説（15分）+
+                課題共有・リポジトリクローン・環境構築（15分）
+              </div>
+            </div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-time">11:00</div>
+            <div class="tl-body">
+              <div class="tl-title">③ 実装スタート</div>
+              <div class="tl-desc">チームで課題に取り組む（1時間）</div>
+            </div>
+          </div>
+          <div class="tl-row tl-row-break">
+            <div class="tl-time">12:00</div>
+            <div class="tl-body">
+              <div class="tl-title">昼休憩（1時間）</div>
+            </div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-time">13:00</div>
+            <div class="tl-body">
+              <div class="tl-title">④ 実装継続</div>
+              <div class="tl-desc">
+                詰まった問題を解消しながら実装を進める（2時間）
+              </div>
+            </div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-time">15:00</div>
+            <div class="tl-body">
+              <div class="tl-title">⑤ クロスレビュー</div>
+              <div class="tl-desc">
+                他チームのコードを読んでフィードバックし合う（1時間）
+              </div>
+            </div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-time">16:00</div>
+            <div class="tl-body">
+              <div class="tl-title">⑥ チーム発表</div>
+              <div class="tl-desc">
+                今日の取り組みを各チームが発表する（1時間）
+              </div>
+            </div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-time">17:00</div>
+            <div class="tl-body">
+              <div class="tl-title">⑦ 全体総括・クロージング</div>
+              <div class="tl-desc">振り返りとまとめ（1時間）</div>
+            </div>
+          </div>
+          <div class="tl-row tl-row-break">
+            <div class="tl-time">18:00</div>
+            <div class="tl-body">
+              <div class="tl-title">終了</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>チーム構成</h2>
+        <div class="team-box">
+          <div class="team-item">
+            <div class="team-label">人数</div>
+            約20名（5人 × 4チーム）
+          </div>
+          <div class="team-item">
+            <div class="team-label">サポート</div>
+            各チームにチューターがつきます
+          </div>
+          <div class="team-item">
+            <div class="team-label">開発対象</div>
+            既存のTodoアプリに機能を追加する
+          </div>
+          <div class="team-item">
+            <div class="team-label">技術スタック</div>
+            Vue.js（プレーン）
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>取り組む課題</h2>
+        <p>
+          課題は3段階あります。★1は全チーム必須、★2・★3は余裕があれば挑戦してください。
+        </p>
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-badge step-badge-1">★1<br />必須</div>
+            <div class="step-body">
+              <div class="step-title">基本課題 — 全チーム取り組む</div>
+              <div class="step-desc">
+                削除・完了チェック・優先度の3機能。仕様書はあるが、書かれていないことはチームで決める。
+              </div>
+              <a class="step-link" href="00_menu.html">課題一覧を見る →</a>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-badge step-badge-2">
+              ★2<br />余裕が<br />あれば
+            </div>
+            <div class="step-body">
+              <div class="step-title">追加課題</div>
+              <div class="step-desc">
+                検索・トグル・期限・ソートの4機能。仕様書はあるが、機能同士の組み合わせはチームで考える。
+              </div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-badge step-badge-3">★3<br />仕様<br />なし</div>
+            <div class="step-body">
+              <div class="step-title">エクストラ課題</div>
+              <div class="step-desc">
+                インライン編集・永続化・D&Dの3機能。何をどう作るかも含めてチームで考える。
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>今日大切にしてほしいこと</h2>
+        <div class="mindset-list">
+          <div class="mindset-item">
+            詰まったときは、まず<strong>「今どんな状況か」をチームで言葉にする</strong>ところから始めてください。答えを探すより先に、状況を整理することの方が大事です。
+          </div>
+          <div class="mindset-item">
+            AIが出してきたコードは、<strong>動いていても正しいとは限りません</strong>。自分で読んで、説明できる状態にしてからコミットしてください。
+          </div>
+          <div class="mindset-item">
+            <strong
+              >仕様書に書かれていないことは、チームで決めてください。</strong
+            >「書いてないからわからない」ではなく「書いてないから自分たちで決める」が今日のスタンスです。
+          </div>
+          <div class="mindset-item">
+            チューターは答えを教えません。でも<strong>詰まったまま黙っていても何も進みません</strong>。「今こういう状況で、こういう方針で動こうとしています」と共有してから動いてください。
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        わからないことはまずチームで。それでも詰まったらチューターへ。
+      </div>
+    </div>
+  </body>
+</html>

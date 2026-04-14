@@ -1,0 +1,856 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2026 Todoアプリ開発ハッカソン — 資料ポータル</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap");
+
+      :root {
+        --bg: #f7f7f5;
+        --surface: #ffffff;
+        --surface2: #f0f0ec;
+        --border: #e4e4de;
+        --border2: #d0d0c8;
+        --text: #1a1a18;
+        --text2: #5a5a52;
+        --text3: #9a9a90;
+
+        --blue: #1a5fa8;
+        --blue-bg: #eef4fc;
+        --blue-bd: #a8c8f0;
+        --teal: #0f7c6a;
+        --teal-bg: #eef8f5;
+        --teal-bd: #9adace;
+        --amber: #c47d0e;
+        --amber-bg: #fef9ee;
+        --amber-bd: #f5d78a;
+        --coral: #c0392b;
+        --coral-bg: #fdf2f0;
+        --coral-bd: #f4b8b0;
+        --purple: #6b3fa0;
+        --purple-bg: #f4f0fc;
+        --purple-bd: #c8aae8;
+        --green: #2a7a4a;
+        --green-bg: #eef8f2;
+        --green-bd: #9ad4b8;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Noto Sans JP", sans-serif;
+        font-weight: 300;
+        line-height: 1.75;
+        min-height: 100vh;
+      }
+
+      /* ===== HEADER ===== */
+      header {
+        background: var(--surface);
+        border-bottom: 2px solid var(--border);
+        padding: 48px 48px 36px;
+      }
+
+      .header-eyebrow {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--blue);
+        margin-bottom: 14px;
+      }
+
+      header h1 {
+        font-size: clamp(22px, 4vw, 38px);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+        margin-bottom: 10px;
+      }
+
+      header h1 em {
+        font-style: normal;
+        color: var(--blue);
+      }
+
+      .header-desc {
+        font-size: 13px;
+        color: var(--text2);
+        max-width: 640px;
+        margin-bottom: 20px;
+      }
+
+      .header-chips {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .chip {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        color: var(--text2);
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 4px 12px;
+      }
+
+      /* ===== MAIN ===== */
+      main {
+        max-width: 1080px;
+        padding: 48px 48px 96px;
+      }
+
+      /* ===== SECTION ===== */
+      .section {
+        margin-bottom: 56px;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: baseline;
+        gap: 14px;
+        margin-bottom: 20px;
+      }
+
+      .section-num {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        color: var(--text3);
+        letter-spacing: 0.1em;
+      }
+
+      .section-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text);
+        letter-spacing: 0.05em;
+      }
+
+      .section-line {
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+
+      /* ===== CARD GRID ===== */
+      .card-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      .card-grid.cols-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .card-grid.cols-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      @media (max-width: 700px) {
+        .card-grid.cols-2,
+        .card-grid.cols-3 {
+          grid-template-columns: 1fr;
+        }
+        header,
+        main {
+          padding-left: 24px;
+          padding-right: 24px;
+        }
+      }
+
+      /* ===== CARD ===== */
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px 22px;
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        transition:
+          border-color 0.15s,
+          box-shadow 0.15s,
+          transform 0.12s;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--accent-color, var(--border2));
+        transition: opacity 0.15s;
+      }
+
+      .card:hover {
+        border-color: var(--accent-color, var(--border2));
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+        transform: translateY(-1px);
+      }
+
+      .card.blue {
+        --accent-color: var(--blue);
+      }
+      .card.teal {
+        --accent-color: var(--teal);
+      }
+      .card.amber {
+        --accent-color: var(--amber);
+      }
+      .card.coral {
+        --accent-color: var(--coral);
+      }
+      .card.purple {
+        --accent-color: var(--purple);
+      }
+      .card.green {
+        --accent-color: var(--green);
+      }
+
+      .card-badge {
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text3);
+        margin-bottom: 2px;
+      }
+
+      .card-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+        line-height: 1.45;
+      }
+
+      .card-desc {
+        font-size: 12px;
+        color: var(--text2);
+        line-height: 1.7;
+      }
+
+      .card-arrow {
+        margin-top: auto;
+        padding-top: 12px;
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        color: var(--text3);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .card:hover .card-arrow {
+        color: var(--accent-color, var(--text2));
+      }
+
+      /* 仕様書カード（横並び小サイズ） */
+      .spec-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 10px;
+      }
+
+      .spec-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 14px 16px;
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        transition:
+          border-color 0.15s,
+          box-shadow 0.15s;
+      }
+
+      .spec-card:hover {
+        border-color: var(--border2);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+      }
+
+      .spec-num {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        color: var(--text3);
+        min-width: 28px;
+        padding-top: 1px;
+      }
+
+      .spec-badge {
+        display: inline-block;
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        padding: 2px 7px;
+        border-radius: 4px;
+        margin-bottom: 4px;
+        font-weight: 500;
+      }
+
+      .spec-badge.must {
+        background: var(--coral-bg);
+        color: var(--coral);
+        border: 1px solid var(--coral-bd);
+      }
+
+      .spec-badge.opt {
+        background: var(--blue-bg);
+        color: var(--blue);
+        border: 1px solid var(--blue-bd);
+      }
+
+      .spec-badge.extra {
+        background: var(--surface2);
+        color: var(--text3);
+        border: 1px solid var(--border);
+      }
+
+      .spec-title {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text);
+        line-height: 1.5;
+      }
+
+      /* ===== AUDIENCE SPLIT ===== */
+      .audience-strip {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 56px;
+      }
+
+      @media (max-width: 600px) {
+        .audience-strip {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .audience-card {
+        border-radius: 12px;
+        padding: 24px;
+        border: 1px solid;
+      }
+
+      .audience-card.trainee {
+        background: var(--blue-bg);
+        border-color: var(--blue-bd);
+      }
+
+      .audience-card.tutor {
+        background: var(--coral-bg);
+        border-color: var(--coral-bd);
+      }
+
+      .audience-label {
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+      }
+
+      .audience-card.trainee .audience-label {
+        color: var(--blue);
+      }
+      .audience-card.tutor .audience-label {
+        color: var(--coral);
+      }
+
+      .audience-links {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .audience-link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text);
+        transition:
+          box-shadow 0.12s,
+          transform 0.1s;
+      }
+
+      .audience-link:hover {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        transform: translateX(2px);
+      }
+
+      .audience-link-sub {
+        font-size: 11px;
+        font-weight: 300;
+        color: var(--text3);
+        margin-left: auto;
+        font-family: "DM Mono", monospace;
+      }
+
+      /* ===== DIVIDER ===== */
+      .divider {
+        height: 1px;
+        background: var(--border);
+        margin: 40px 0;
+      }
+
+      /* ===== TIMELINE MINI ===== */
+      .tl-mini {
+        display: grid;
+        grid-template-columns: 60px 1fr;
+        gap: 0;
+      }
+
+      .tl-mini-row {
+        display: contents;
+      }
+
+      .tl-mini-time {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        color: var(--text3);
+        padding: 8px 0;
+        border-right: 1px solid var(--border);
+        padding-right: 14px;
+        text-align: right;
+      }
+
+      .tl-mini-body {
+        padding: 8px 0 8px 14px;
+        font-size: 12px;
+        color: var(--text2);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .tl-mini-row:last-child .tl-mini-body,
+      .tl-mini-row:last-child .tl-mini-time {
+        border-bottom: none;
+      }
+
+      .tl-tag {
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        padding: 1px 7px;
+        border-radius: 4px;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        color: var(--text3);
+        white-space: nowrap;
+      }
+
+      /* ===== FOOTER ===== */
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 20px 48px;
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        color: var(--text3);
+        display: flex;
+        gap: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-eyebrow">2026年度 新入社員研修 / 研修委員会</div>
+      <h1>Todoアプリ開発<br /><em>ハッカソン</em> 資料ポータル</h1>
+      <p class="header-desc">
+        研修当日に使う資料をすべてここから開けます。対象に応じたリンクからアクセスしてください。
+      </p>
+      <div class="header-chips">
+        <span class="chip">対象：新入社員 約20名</span>
+        <span class="chip">形式：5人 × 4チーム</span>
+        <span class="chip">期間：1日（8時間）</span>
+        <span class="chip">題材：Todoアプリ改修</span>
+      </div>
+    </header>
+
+    <main>
+      <!-- ===== 研修生 / チューター クイックリンク ===== -->
+      <div class="audience-strip">
+        <div class="audience-card trainee">
+          <div class="audience-label">👤 研修生向け</div>
+          <div class="audience-links">
+            <a class="audience-link" href="01_全体の流れ/01_A_全体の流れ.html">
+              今日の流れ・ルール
+              <span class="audience-link-sub">最初に開く</span>
+            </a>
+            <a
+              class="audience-link"
+              href="03_課題セットアップ/03_B_新人研修課題/00_menu.html"
+            >
+              課題一覧
+              <span class="audience-link-sub">実装中に開く</span>
+            </a>
+            <a
+              class="audience-link"
+              href="03_課題セットアップ/03_A_課題リポジトリセットアップ.html"
+            >
+              環境構築手順
+              <span class="audience-link-sub">セットアップ時</span>
+            </a>
+          </div>
+        </div>
+        <div class="audience-card tutor">
+          <div class="audience-label">🎓 チューター向け（非公開）</div>
+          <div class="audience-links">
+            <a class="audience-link" href="01_全体の流れ/01_A_全体の流れ.html">
+              全体ガイド・観察ポイント
+              <span class="audience-link-sub">事前に熟読</span>
+            </a>
+            <a
+              class="audience-link"
+              href="04_クロスレビュー/04_クロスレビュー説明.html"
+            >
+              クロスレビュー説明
+              <span class="audience-link-sub">⑤フェーズ前</span>
+            </a>
+            <a class="audience-link" href="05_発表/05_発表の進め方.html">
+              発表の進め方
+              <span class="audience-link-sub">⑥フェーズ前</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== タイムライン ===== -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-num">SCHEDULE</span>
+          <span class="section-title">当日のタイムライン</span>
+          <div class="section-line"></div>
+        </div>
+
+        <div class="tl-mini">
+          <div class="tl-mini-row">
+            <div class="tl-mini-time">10:00</div>
+            <div class="tl-mini-body">
+              <span>① 全体説明・Gitレクチャー</span>
+              <span class="tl-tag">30min</span>
+            </div>
+          </div>
+          <div class="tl-mini-row">
+            <div class="tl-mini-time">10:30</div>
+            <div class="tl-mini-body">
+              <span>② 課題共有・環境セットアップ</span>
+              <span class="tl-tag">30min</span>
+            </div>
+          </div>
+          <div class="tl-mini-row">
+            <div class="tl-mini-time">11:00</div>
+            <div class="tl-mini-body">
+              <span>③ 実装フェーズ（午前）</span>
+              <span class="tl-tag">1h</span>
+            </div>
+          </div>
+          <div class="tl-mini-row">
+            <div class="tl-mini-time">12:00</div>
+            <div class="tl-mini-body" style="color: var(--text3)">
+              <span>昼休憩</span>
+              <span class="tl-tag">1h</span>
+            </div>
+          </div>
+          <div class="tl-mini-row">
+            <div class="tl-mini-time">13:00</div>
+            <div class="tl-mini-body">
+              <span>④ 実装継続 & Git問題解消</span>
+              <span class="tl-tag">2h</span>
+            </div>
+          </div>
+          <div class="tl-mini-row">
+            <div class="tl-mini-time">15:00</div>
+            <div class="tl-mini-body">
+              <span>⑤ クロスレビュー</span>
+              <span class="tl-tag">1h</span>
+            </div>
+          </div>
+          <div class="tl-mini-row">
+            <div class="tl-mini-time">16:00</div>
+            <div class="tl-mini-body">
+              <span>⑥ チーム発表</span>
+              <span class="tl-tag">1h</span>
+            </div>
+          </div>
+          <div class="tl-mini-row">
+            <div class="tl-mini-time">17:00</div>
+            <div class="tl-mini-body">
+              <span>⑦ 全体総括・クロージング</span>
+              <span class="tl-tag">1h</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== セクション1: 全体の流れ ===== -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-num">01</span>
+          <span class="section-title">全体の流れ</span>
+          <div class="section-line"></div>
+        </div>
+        <div class="card-grid cols-2">
+          <a class="card blue" href="01_全体の流れ/01_A_全体の流れ.html">
+            <div class="card-badge">01-A　研修生 + チューター共通</div>
+            <div class="card-title">今日の流れ・ルール・チーム構成</div>
+            <div class="card-desc">
+              タイムライン・課題の概要・今日大切にしてほしいことをまとめた当日配布資料。研修生はまずここから。
+            </div>
+            <div class="card-arrow">開く →</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- ===== セクション2: Gitについて ===== -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-num">02</span>
+          <span class="section-title">Git について</span>
+          <div class="section-line"></div>
+        </div>
+        <div class="card-grid cols-2">
+          <a class="card teal" href="02_Gitについて/02_A_Git概念.html">
+            <div class="card-badge">02-A　Gitレクチャー資料</div>
+            <div class="card-title">
+              Git とは — バージョン管理の基礎と実践ワークフロー
+            </div>
+            <div class="card-desc">
+              ブランチ・コミット・マージ・コンフリクトを概念から説明するレクチャー用スライド。
+            </div>
+            <div class="card-arrow">開く →</div>
+          </a>
+          <a class="card teal" href="02_Gitについて/02_B_Git基本操作.html">
+            <div class="card-badge">02-B　コマンドリファレンス</div>
+            <div class="card-title">Git の基本コマンド</div>
+            <div class="card-desc">
+              実装中に困ったときに参照するコマンド逆引き。研修生が手元に置いておく用。
+            </div>
+            <div class="card-arrow">開く →</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- ===== セクション3: 課題セットアップ ===== -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-num">03</span>
+          <span class="section-title">課題セットアップ</span>
+          <div class="section-line"></div>
+        </div>
+        <div class="card-grid cols-2" style="margin-bottom: 16px">
+          <a
+            class="card amber"
+            href="03_課題セットアップ/03_A_課題リポジトリセットアップ.html"
+          >
+            <div class="card-badge">03-A　環境構築手順</div>
+            <div class="card-title">Windows 11 向け Vue.js 環境構築手順書</div>
+            <div class="card-desc">
+              Node.js
+              のインストールからリポジトリのクローン・起動確認まで。セットアップタイムに開く。
+            </div>
+            <div class="card-arrow">開く →</div>
+          </a>
+          <a
+            class="card amber"
+            href="03_課題セットアップ/03_B_新人研修課題/00_menu.html"
+          >
+            <div class="card-badge">03-B　課題一覧メニュー</div>
+            <div class="card-title">ハッカソン 課題一覧</div>
+            <div class="card-desc">
+              ★1必須〜★3エクストラまで全課題へのリンクをまとめたハブ。実装中はここをブックマーク。
+            </div>
+            <div class="card-arrow">開く →</div>
+          </a>
+        </div>
+
+        <!-- 仕様書一覧 -->
+        <div style="margin-bottom: 10px">
+          <span
+            style="
+              font-family: &quot;DM Mono&quot;, monospace;
+              font-size: 11px;
+              color: var(--text3);
+              letter-spacing: 0.1em;
+            "
+            >SPECS — 個別仕様書</span
+          >
+        </div>
+        <div class="spec-grid">
+          <a
+            class="spec-card"
+            href="03_課題セットアップ/03_B_新人研修課題/01_delete.html"
+          >
+            <span class="spec-num">01</span>
+            <div class="spec-info">
+              <span class="spec-badge must">★1 必須</span>
+              <div class="spec-title">タスクの削除</div>
+            </div>
+          </a>
+          <a
+            class="spec-card"
+            href="03_課題セットアップ/03_B_新人研修課題/02_complete.html"
+          >
+            <span class="spec-num">02</span>
+            <div class="spec-info">
+              <span class="spec-badge must">★1 必須</span>
+              <div class="spec-title">タスクの完了チェック</div>
+            </div>
+          </a>
+          <a
+            class="spec-card"
+            href="03_課題セットアップ/03_B_新人研修課題/03_priority.html"
+          >
+            <span class="spec-num">03</span>
+            <div class="spec-info">
+              <span class="spec-badge must">★1 必須</span>
+              <div class="spec-title">優先度の設定と色分け表示</div>
+            </div>
+          </a>
+          <a
+            class="spec-card"
+            href="03_課題セットアップ/03_B_新人研修課題/04_search.html"
+          >
+            <span class="spec-num">04</span>
+            <div class="spec-info">
+              <span class="spec-badge opt">★2 追加</span>
+              <div class="spec-title">タスクの検索（フィルタリング）</div>
+            </div>
+          </a>
+          <a
+            class="spec-card"
+            href="03_課題セットアップ/03_B_新人研修課題/05_toggle.html"
+          >
+            <span class="spec-num">05</span>
+            <div class="spec-info">
+              <span class="spec-badge opt">★2 追加</span>
+              <div class="spec-title">完了済み非表示トグル＋件数表示</div>
+            </div>
+          </a>
+          <a
+            class="spec-card"
+            href="03_課題セットアップ/03_B_新人研修課題/06_deadline.html"
+          >
+            <span class="spec-num">06</span>
+            <div class="spec-info">
+              <span class="spec-badge opt">★2 追加</span>
+              <div class="spec-title">期限設定と期限切れの警告表示</div>
+            </div>
+          </a>
+          <a
+            class="spec-card"
+            href="03_課題セットアップ/03_B_新人研修課題/07_sort.html"
+          >
+            <span class="spec-num">07</span>
+            <div class="spec-info">
+              <span class="spec-badge opt">★2 追加</span>
+              <div class="spec-title">優先度＋期限での複合ソート</div>
+            </div>
+          </a>
+          <a
+            class="spec-card"
+            href="03_課題セットアップ/03_B_新人研修課題/08_inline_edit.html"
+          >
+            <span class="spec-num">08</span>
+            <div class="spec-info">
+              <span class="spec-badge extra">★3 エクストラ</span>
+              <div class="spec-title">タスクのインライン編集</div>
+            </div>
+          </a>
+          <a
+            class="spec-card"
+            href="03_課題セットアップ/03_B_新人研修課題/09_persist.html"
+          >
+            <span class="spec-num">09</span>
+            <div class="spec-info">
+              <span class="spec-badge extra">★3 エクストラ</span>
+              <div class="spec-title">データの永続化</div>
+            </div>
+          </a>
+          <a
+            class="spec-card"
+            href="03_課題セットアップ/03_B_新人研修課題/10_dnd.html"
+          >
+            <span class="spec-num">10</span>
+            <div class="spec-info">
+              <span class="spec-badge extra">★3 エクストラ</span>
+              <div class="spec-title">タスクのドラッグ＆ドロップ並び替え</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- ===== セクション4: クロスレビュー ===== -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-num">04</span>
+          <span class="section-title">クロスレビュー</span>
+          <div class="section-line"></div>
+        </div>
+        <div class="card-grid cols-2">
+          <a
+            class="card purple"
+            href="04_クロスレビュー/04_クロスレビュー説明.html"
+          >
+            <div class="card-badge">04　⑤ クロスレビューフェーズ</div>
+            <div class="card-title">クロスレビューの進め方・シート</div>
+            <div class="card-desc">
+              ペアレビューの手順・レビューシート・60分の使い方。15時になったらここを開く。
+            </div>
+            <div class="card-arrow">開く →</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- ===== セクション5: 発表 ===== -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-num">05</span>
+          <span class="section-title">発表</span>
+          <div class="section-line"></div>
+        </div>
+        <div class="card-grid cols-2">
+          <a class="card green" href="05_発表/05_発表の進め方.html">
+            <div class="card-badge">05　⑥ チーム発表フェーズ</div>
+            <div class="card-title">発表の進め方・発表シート</div>
+            <div class="card-desc">
+              15分 ×
+              4チームの進行手順と発表シートテンプレート。16時になったらここを開く。
+            </div>
+            <div class="card-arrow">開く →</div>
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <span>2026年度 新人研修課題委員会</span>
+      <span>—</span>
+      <span>チューター向け非公開資料は赤枠のカードを参照</span>
+    </footer>
+  </body>
+</html>

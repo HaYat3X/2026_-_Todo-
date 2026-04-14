@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ハッカソン 課題一覧</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: sans-serif;
+        background: #f7f7f5;
+        color: #1a1a1a;
+        min-height: 100vh;
+        padding: 48px 24px;
+      }
+      .container {
+        max-width: 760px;
+        margin: 0 auto;
+      }
+
+      .header {
+        margin-bottom: 48px;
+      }
+      .header h1 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+      .header p {
+        font-size: 0.9rem;
+        color: #666;
+        line-height: 1.7;
+      }
+
+      .section {
+        margin-bottom: 40px;
+      }
+      .section-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+      .section-label h2 {
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #888;
+      }
+      .section-label .line {
+        flex: 1;
+        height: 1px;
+        background: #ddd;
+      }
+
+      .badge {
+        display: inline-block;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 3px;
+      }
+      .badge-1 {
+        background: #1a1a1a;
+        color: #fff;
+      }
+      .badge-2 {
+        background: #555;
+        color: #fff;
+      }
+      .badge-3 {
+        background: #fff;
+        color: #1a1a1a;
+        border: 1.5px solid #1a1a1a;
+      }
+
+      .cards {
+        display: grid;
+        gap: 10px;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        padding: 16px 20px;
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        transition:
+          border-color 0.15s,
+          box-shadow 0.15s;
+      }
+      .card:hover {
+        border-color: #aaa;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      }
+      .card-num {
+        font-size: 0.75rem;
+        color: #bbb;
+        font-weight: 600;
+        min-width: 20px;
+      }
+      .card-body {
+        flex: 1;
+      }
+      .card-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+      .card-desc {
+        font-size: 0.8rem;
+        color: #888;
+        line-height: 1.5;
+      }
+      .card-arrow {
+        color: #ccc;
+        font-size: 1rem;
+      }
+
+      .card-3 {
+        border-style: dashed;
+        background: #fafafa;
+      }
+      .card-3:hover {
+        border-color: #888;
+      }
+      .card-3 .card-title {
+        color: #444;
+      }
+
+      .rule-box {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        padding: 20px 24px;
+        margin-bottom: 40px;
+      }
+      .rule-box h2 {
+        font-size: 0.85rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+      }
+      .rule-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px 24px;
+      }
+      .rule-item {
+        font-size: 0.82rem;
+        color: #444;
+        line-height: 1.6;
+        padding-left: 12px;
+        position: relative;
+      }
+      .rule-item::before {
+        content: "—";
+        position: absolute;
+        left: 0;
+        color: #bbb;
+      }
+
+      .footer {
+        font-size: 0.75rem;
+        color: #bbb;
+        text-align: center;
+        margin-top: 48px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>AI × Git × 報連相 ハッカソン</h1>
+        <p>
+          課題一覧 ／ 実装するものを確認して、チームで優先順位を決めてください。
+        </p>
+      </div>
+
+      <div class="rule-box">
+        <h2>Git ルール</h2>
+        <div class="rule-grid">
+          <div class="rule-item">ブランチ名：<code>feature/機能名</code></div>
+          <div class="rule-item">
+            コミット形式：<code>[機能名] 何をしたか</code>
+          </div>
+          <div class="rule-item">マージ前に動作確認 & チームへ一声</div>
+          <div class="rule-item">詰まったら 15分以内にチームへ共有</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">
+          <span class="badge badge-1">★1 基本課題</span>
+          <h2>全チーム必須</h2>
+          <div class="line"></div>
+        </div>
+        <div class="cards">
+          <a class="card" href="01_delete.html">
+            <span class="card-num">01</span>
+            <div class="card-body">
+              <div class="card-title">タスクの削除</div>
+              <div class="card-desc">登録したタスクを一覧から取り除く</div>
+            </div>
+            <span class="card-arrow">›</span>
+          </a>
+          <a class="card" href="02_complete.html">
+            <span class="card-num">02</span>
+            <div class="card-body">
+              <div class="card-title">タスクの完了チェック</div>
+              <div class="card-desc">
+                完了・未完了の状態を切り替えられるようにする
+              </div>
+            </div>
+            <span class="card-arrow">›</span>
+          </a>
+          <a class="card" href="03_priority.html">
+            <span class="card-num">03</span>
+            <div class="card-body">
+              <div class="card-title">優先度の設定と色分け表示</div>
+              <div class="card-desc">
+                タスクに優先度をつけ、一覧で見た目に反映する
+              </div>
+            </div>
+            <span class="card-arrow">›</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">
+          <span class="badge badge-2">★2 追加課題</span>
+          <h2>余裕があれば</h2>
+          <div class="line"></div>
+        </div>
+        <div class="cards">
+          <a class="card" href="04_search.html">
+            <span class="card-num">04</span>
+            <div class="card-body">
+              <div class="card-title">タスクの検索（フィルタリング）</div>
+              <div class="card-desc">文字入力でタスクを絞り込んで表示する</div>
+            </div>
+            <span class="card-arrow">›</span>
+          </a>
+          <a class="card" href="05_toggle.html">
+            <span class="card-num">05</span>
+            <div class="card-body">
+              <div class="card-title">完了済み非表示トグル＋件数表示</div>
+              <div class="card-desc">
+                完了タスクを隠すトグルと、タスク件数の表示
+              </div>
+            </div>
+            <span class="card-arrow">›</span>
+          </a>
+          <a class="card" href="06_deadline.html">
+            <span class="card-num">06</span>
+            <div class="card-body">
+              <div class="card-title">期限設定と期限切れの警告表示</div>
+              <div class="card-desc">
+                タスクに期限日を設定し、過ぎたものを警告表示する
+              </div>
+            </div>
+            <span class="card-arrow">›</span>
+          </a>
+          <a class="card" href="07_sort.html">
+            <span class="card-num">07</span>
+            <div class="card-body">
+              <div class="card-title">優先度＋期限での複合ソート</div>
+              <div class="card-desc">
+                優先度と期限の2条件でタスクを並び替える
+              </div>
+            </div>
+            <span class="card-arrow">›</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">
+          <span class="badge badge-3">★3 エクストラ</span>
+          <h2>仕様なし・チームで考える</h2>
+          <div class="line"></div>
+        </div>
+        <div class="cards">
+          <a class="card card-3" href="08_inline_edit.html">
+            <span class="card-num">08</span>
+            <div class="card-body">
+              <div class="card-title">タスクのインライン編集</div>
+              <div class="card-desc">一覧画面の中でタスクを直接編集する</div>
+            </div>
+            <span class="card-arrow">›</span>
+          </a>
+          <a class="card card-3" href="09_persist.html">
+            <span class="card-num">09</span>
+            <div class="card-body">
+              <div class="card-title">データの永続化</div>
+              <div class="card-desc">
+                リロードしてもタスクが消えないようにする
+              </div>
+            </div>
+            <span class="card-arrow">›</span>
+          </a>
+          <a class="card card-3" href="10_dnd.html">
+            <span class="card-num">10</span>
+            <div class="card-body">
+              <div class="card-title">タスクのドラッグ＆ドロップ並び替え</div>
+              <div class="card-desc">ドラッグで順番を自由に入れ替える</div>
+            </div>
+            <span class="card-arrow">›</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer">
+        不明な点はまずチームで方針を決めてから、チューターへ。
+      </div>
+    </div>
+  </body>
+</html>

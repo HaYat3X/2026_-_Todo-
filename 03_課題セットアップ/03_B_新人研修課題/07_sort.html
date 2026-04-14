@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>仕様書 07 - 優先度＋期限での複合ソート</title>
+<style>
+  body { font-family: sans-serif; max-width: 720px; margin: 48px auto; padding: 0 24px; color: #1a1a1a; line-height: 1.7; background: #fff; }
+  h1 { font-size: 1.3rem; font-weight: 600; border-bottom: 2px solid #1a1a1a; padding-bottom: 8px; margin-bottom: 4px; }
+  .meta { font-size: 0.8rem; color: #888; margin-bottom: 32px; }
+  h2 { font-size: 1rem; font-weight: 600; margin-top: 36px; margin-bottom: 8px; }
+  p { margin: 0 0 12px; font-size: 0.92rem; }
+  ul { margin: 0 0 12px; padding-left: 20px; font-size: 0.92rem; }
+  li { margin-bottom: 4px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-bottom: 12px; }
+  th { background: #f4f4f4; text-align: left; padding: 7px 10px; border: 1px solid #ddd; font-weight: 600; }
+  td { padding: 7px 10px; border: 1px solid #ddd; vertical-align: top; }
+  code { font-family: monospace; font-size: 0.88rem; background: #f4f4f4; padding: 1px 5px; border-radius: 3px; }
+  .note { background: #fffbe6; border-left: 3px solid #f0c040; padding: 10px 14px; font-size: 0.85rem; margin: 12px 0; }
+</style>
+</head>
+<body>
+
+<h1>機能追加仕様書 ／ 優先度＋期限での複合ソート</h1>
+<div class="meta">区分：追加課題（★2） ／ 余裕があれば実装</div>
+
+<h2>背景</h2>
+<p>タスクが増えてきたとき、重要かつ期限が近いものが上に来るよう自動で並び替えたい。</p>
+
+<h2>追加してほしい機能</h2>
+<p>優先度と期限日の2つの条件でタスクを並び替えて表示できるようにしてほしい。</p>
+
+<h2>要件</h2>
+<ul>
+  <li>優先度の高いタスクが上に来ること</li>
+  <li>同じ優先度の場合、期限が早いタスクが上に来ること</li>
+  <li>ソートのオン・オフを切り替えられること</li>
+</ul>
+
+<h2>備考</h2>
+<ul>
+  <li>期限が設定されていないタスクの並び順はチームで決めてよい</li>
+  <li>完了済みタスクのソート順は定めない</li>
+  <li>★4（検索）や★5（完了非表示）との組み合わせについては定めない</li>
+</ul>
+
+<div class="note">
+  本仕様書に書かれていない挙動については、チームで判断して実装すること。
+</div>
+
+</body>
+</html>

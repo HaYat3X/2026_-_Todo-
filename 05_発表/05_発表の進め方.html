@@ -1,0 +1,423 @@
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: sans-serif;
+    background: #fafaf8;
+    color: #1a1a1a;
+    padding: 48px 24px;
+  }
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .header {
+    margin-bottom: 48px;
+  }
+  .header-label {
+    font-size: 0.75rem;
+    color: #aaa;
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+  }
+  .header h1 {
+    font-size: 1.65rem;
+    font-weight: 700;
+    line-height: 1.35;
+    margin-bottom: 6px;
+  }
+  .header-sub {
+    font-size: 0.88rem;
+    color: #888;
+  }
+  .section {
+    margin-bottom: 44px;
+  }
+  h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  h2::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 1em;
+    background: #1a1a1a;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  p {
+    font-size: 0.92rem;
+    line-height: 1.85;
+    margin-bottom: 12px;
+    color: #444;
+  }
+  p:last-child {
+    margin-bottom: 0;
+  }
+  .what-box {
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 8px;
+    padding: 20px 22px;
+    margin-bottom: 0;
+  }
+  .mindset-list {
+    display: grid;
+    gap: 10px;
+  }
+  .mindset-item {
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: #444;
+  }
+  .mindset-item strong {
+    color: #1a1a1a;
+  }
+  .tl {
+    padding-left: 16px;
+    border-left: 2px solid #e0e0e0;
+  }
+  .tl-row {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid #f0f0ee;
+  }
+  .tl-row:last-child {
+    border-bottom: none;
+  }
+  .tl-time {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #888;
+    min-width: 44px;
+    padding-top: 2px;
+  }
+  .tl-body {
+    flex: 1;
+  }
+  .tl-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .tl-desc {
+    font-size: 0.82rem;
+    color: #777;
+    line-height: 1.65;
+  }
+  .tl-note {
+    font-size: 0.78rem;
+    color: #aaa;
+    margin-top: 6px;
+    padding: 6px 10px;
+    background: #f7f7f5;
+    border-radius: 4px;
+    border-left: 2px solid #e0e0e0;
+    line-height: 1.6;
+  }
+  .kpt-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+  .kpt-card {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #ebebeb;
+  }
+  .kpt-head {
+    padding: 12px 14px;
+  }
+  .kpt-head-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin-bottom: 2px;
+  }
+  .kpt-head-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+  }
+  .kpt-body {
+    background: #fff;
+    padding: 12px 14px;
+    font-size: 0.82rem;
+    color: #555;
+    line-height: 1.75;
+    border-top: 1px solid #ebebeb;
+  }
+  .kpt-k .kpt-head {
+    background: #eaf3de;
+  }
+  .kpt-k .kpt-head-label {
+    color: #3b6d11;
+  }
+  .kpt-k .kpt-head-title {
+    color: #27500a;
+  }
+  .kpt-p .kpt-head {
+    background: #faece7;
+  }
+  .kpt-p .kpt-head-label {
+    color: #993c1d;
+  }
+  .kpt-p .kpt-head-title {
+    color: #712b13;
+  }
+  .kpt-t .kpt-head {
+    background: #e6f1fb;
+  }
+  .kpt-t .kpt-head-label {
+    color: #185fa5;
+  }
+  .kpt-t .kpt-head-title {
+    color: #0c447c;
+  }
+  .example-box {
+    background: #f7f7f5;
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: #666;
+    line-height: 1.75;
+  }
+  .example-box-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #aaa;
+    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .example-item {
+    padding: 3px 0;
+    display: flex;
+    gap: 6px;
+  }
+  .example-item::before {
+    content: "—";
+    color: #ccc;
+    flex-shrink: 0;
+  }
+  .warn-box {
+    background: #fffbe6;
+    border: 1px solid #f0e08a;
+    border-radius: 8px;
+    padding: 16px 20px;
+  }
+  .warn-box-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #a07800;
+    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .warn-box p {
+    font-size: 0.88rem;
+    color: #5a4400;
+    margin-bottom: 0;
+    line-height: 1.75;
+  }
+  .footer {
+    font-size: 0.75rem;
+    color: #bbb;
+    text-align: center;
+    margin-top: 52px;
+    padding-top: 20px;
+    border-top: 1px solid #ebebeb;
+  }
+  @media (max-width: 480px) {
+    .kpt-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<div class="container">
+  <div class="header">
+    <div class="header-label">研修生向け ／ チーム発表</div>
+    <h1>発表の進め方</h1>
+    <div class="header-sub">⑥ チーム発表 ／ 16:00〜17:00（各チーム15分）</div>
+  </div>
+
+  <div class="section">
+    <h2>この発表で話すこと</h2>
+    <div class="what-box">
+      <p>
+        「何を作ったか」より、<strong>「何が起きて、どう判断したか」</strong>を話す時間です。
+      </p>
+      <p>
+        完成度は関係ありません。今日一日のプロセスをそのまま言語化してください。
+      </p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>15分の構成</h2>
+    <div class="tl">
+      <div class="tl-row">
+        <div class="tl-time">2分</div>
+        <div class="tl-body">
+          <div class="tl-title">① 今日の出来事を報告する</div>
+          <div class="tl-desc">
+            取り組んだ機能・予想外だったこと・Git/AIで何が起きたかを事実ベースで話す。
+          </div>
+          <div class="tl-note">評価や感想は不要。「何が起きたか」だけ。</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">3分</div>
+        <div class="tl-body">
+          <div class="tl-title">② AIへのプロンプトを振り返る</div>
+          <div class="tl-desc">
+            最初に打ったプロンプト・「これ合ってる？」と疑った瞬間・プロンプトを改善したら何が変わったかを話す。
+          </div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">3分</div>
+        <div class="tl-body">
+          <div class="tl-title">③ Gitで何が起きたかを話す</div>
+          <div class="tl-desc">
+            コンフリクトや予想外のエラー・どうやって解決しようとしたか・「こうしとけばよかった」と思ったことを話す。
+          </div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2分</div>
+        <div class="tl-body">
+          <div class="tl-title">④ 報連相の判断を振り返る</div>
+          <div class="tl-desc">
+            チューターに報告したタイミングとその理由・「報告すべきか迷った」場面があれば話す。
+          </div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">5分</div>
+        <div class="tl-body">
+          <div class="tl-title">⑤ KPT（今日の学びを整理する）</div>
+          <div class="tl-desc">
+            Keep・Problem・Tryの3つで、今日の学びをまとめる。詳しくは下の説明を読んでください。
+          </div>
+          <div class="tl-note">
+            クロスレビューで出てきた気づきをそのまま使ってOKです。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>KPTってなに？</h2>
+    <div class="what-box" style="margin-bottom: 16px">
+      <p>
+        今日一日の体験を<strong>3つの問い</strong>で整理するふりかえりの方法です。エンジニアの現場でよく使われます。
+      </p>
+      <p>
+        難しく考えなくていいです。「良かったこと・困ったこと・次やること」を一言ずつ言えればOKです。
+      </p>
+    </div>
+    <div class="kpt-grid">
+      <div class="kpt-card kpt-k">
+        <div class="kpt-head">
+          <div class="kpt-head-label">Keep</div>
+          <div class="kpt-head-title">続けたいこと</div>
+        </div>
+        <div class="kpt-body">
+          今日うまくいったこと。次もやり続けたい判断・動き方・AIの使い方。
+          <div class="example-box">
+            <div class="example-box-label">例</div>
+            <div class="example-item">
+              詰まったときにチームで状況を言語化してから動いた
+            </div>
+            <div class="example-item">
+              AIの回答を貼る前にコードを読んで確認した
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="kpt-card kpt-p">
+        <div class="kpt-head">
+          <div class="kpt-head-label">Problem</div>
+          <div class="kpt-head-title">困ったこと</div>
+        </div>
+        <div class="kpt-body">
+          今日うまくいかなかったこと・後悔したこと。失敗や詰まりをそのまま書いてOK。
+          <div class="example-box">
+            <div class="example-box-label">例</div>
+            <div class="example-item">
+              コミットメッセージを適当に書いて後で意味がわからなくなった
+            </div>
+            <div class="example-item">AIの回答をそのまま使ったらバグが出た</div>
+          </div>
+        </div>
+      </div>
+      <div class="kpt-card kpt-t">
+        <div class="kpt-head">
+          <div class="kpt-head-label">Try</div>
+          <div class="kpt-head-title">次にやること</div>
+        </div>
+        <div class="kpt-body">
+          配属後の現場で実際にやること。「次はこうする」を一個だけ具体的に。
+          <div class="example-box">
+            <div class="example-box-label">例</div>
+            <div class="example-item">
+              AIを使う前に自分で方針を決めてからプロンプトを書く
+            </div>
+            <div class="example-item">
+              コミットは作業の区切りごとに、理由がわかるメッセージで残す
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Tryを書くときのコツ</h2>
+    <div class="mindset-list">
+      <div class="mindset-item">
+        <strong>「ちゃんとやります」はTryじゃない。</strong
+        >「AIを使う前に自分で考えます」ではなく、「AIに投げる前に箇条書きで方針を3行書く」のように、<strong>具体的な行動</strong>で書いてください。
+      </div>
+      <div class="mindset-item">
+        <strong>一個だけでいい。</strong
+        >たくさん書くより、「これだけは絶対やる」を一個絞った方が配属後に活きます。
+      </div>
+      <div class="mindset-item">
+        <strong>クロスレビューで出てきた気づきをそのまま使っていい。</strong
+        >「相手チームへの提案」として出てきた内容は、自分たちのTryにもなります。
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>発表前に確認すること</h2>
+    <div class="warn-box">
+      <div class="warn-box-label">チェックポイント</div>
+      <p>
+        ① 〜③は「感想」ではなく「事実」になっているか<br />KPTのTryは「具体的な行動」になっているか<br />スライドは不要。発表シートをそのまま読み上げるだけでOK
+      </p>
+    </div>
+  </div>
+
+  <div class="footer">
+    完成度より、考えて動いたプロセスを大事にしてください。
+  </div>
+</div>

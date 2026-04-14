@@ -1,0 +1,532 @@
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: sans-serif;
+    background: #fafaf8;
+    color: #1a1a1a;
+    padding: 48px 24px;
+  }
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .header {
+    margin-bottom: 48px;
+  }
+  .header-label {
+    font-size: 0.75rem;
+    color: #aaa;
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+  }
+  .header h1 {
+    font-size: 1.65rem;
+    font-weight: 700;
+    line-height: 1.35;
+    margin-bottom: 6px;
+  }
+  .header-sub {
+    font-size: 0.88rem;
+    color: #888;
+  }
+  .section {
+    margin-bottom: 44px;
+  }
+  h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  h2::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 1em;
+    background: #1a1a1a;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  p {
+    font-size: 0.92rem;
+    line-height: 1.85;
+    margin-bottom: 12px;
+    color: #444;
+  }
+  .tl {
+    padding-left: 16px;
+    border-left: 2px solid #e0e0e0;
+  }
+  .tl-row {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0ee;
+  }
+  .tl-row:last-child {
+    border-bottom: none;
+  }
+  .tl-time {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #888;
+    min-width: 56px;
+    padding-top: 1px;
+  }
+  .tl-body {
+    flex: 1;
+  }
+  .tl-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .tl-desc {
+    font-size: 0.82rem;
+    color: #777;
+    line-height: 1.6;
+  }
+  .tl-note {
+    font-size: 0.78rem;
+    color: #aaa;
+    margin-top: 4px;
+    padding: 6px 10px;
+    background: #f7f7f5;
+    border-radius: 4px;
+    border-left: 2px solid #e0e0e0;
+  }
+  .step-list {
+    display: grid;
+    gap: 8px;
+  }
+  .step-item {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    border: 1px solid #ebebeb;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .step-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #fff;
+    padding: 12px 8px;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .badge-1 {
+    background: #1a1a1a;
+  }
+  .badge-2 {
+    background: #888;
+  }
+  .badge-3 {
+    background: #bbb;
+  }
+  .step-body {
+    padding: 14px 16px;
+  }
+  .step-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+  .step-desc {
+    font-size: 0.82rem;
+    color: #777;
+    line-height: 1.6;
+  }
+  .mindset-list {
+    display: grid;
+    gap: 10px;
+  }
+  .mindset-item {
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: #444;
+  }
+  .mindset-item strong {
+    color: #1a1a1a;
+  }
+  .sheet-box {
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .sheet-head {
+    padding: 14px 18px;
+    border-bottom: 1px solid #ebebeb;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sheet-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #1a1a1a;
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .sheet-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .sheet-sub {
+    font-size: 0.78rem;
+    color: #888;
+    margin-left: auto;
+  }
+  .sheet-body {
+    padding: 14px 18px;
+  }
+  .sheet-q {
+    font-size: 0.82rem;
+    color: #555;
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    background: #f7f7f5;
+    border-radius: 6px;
+    border-left: 2px solid #ccc;
+  }
+  .sheet-field {
+    width: 100%;
+    border: 1px solid #ebebeb;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 0.82rem;
+    color: #1a1a1a;
+    background: #fff;
+    resize: vertical;
+    font-family: sans-serif;
+    margin-top: 6px;
+    min-height: 52px;
+    line-height: 1.6;
+  }
+  .sheet-field:focus {
+    outline: none;
+    border-color: #aaa;
+  }
+  .table-wrap {
+    width: 100%;
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+  th {
+    background: #f7f7f5;
+    padding: 8px 10px;
+    border: 1px solid #ebebeb;
+    font-weight: 600;
+    color: #555;
+    text-align: left;
+    font-size: 0.78rem;
+  }
+  td {
+    padding: 8px 10px;
+    border: 1px solid #ebebeb;
+    vertical-align: top;
+  }
+  td textarea {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 0.82rem;
+    font-family: sans-serif;
+    resize: vertical;
+    min-height: 40px;
+    padding: 0;
+    color: #1a1a1a;
+    line-height: 1.6;
+  }
+  td textarea:focus {
+    outline: none;
+  }
+  .footer {
+    font-size: 0.75rem;
+    color: #bbb;
+    text-align: center;
+    margin-top: 52px;
+    padding-top: 20px;
+    border-top: 1px solid #ebebeb;
+  }
+</style>
+
+<div class="container">
+  <div class="header">
+    <div class="header-label">研修生向け ／ クロスレビュー</div>
+    <h1>クロスレビューの進め方</h1>
+    <div class="header-sub">⑤ クロスレビュー ／ 15:00〜16:00（60分）</div>
+  </div>
+
+  <div class="section">
+    <h2>この時間の目的</h2>
+    <div class="mindset-list">
+      <div class="mindset-item">
+        コードの善し悪しを評価する場ではありません。<strong>相手チームがどう判断したかを読んで、自分たちの判断と比べる</strong>時間です。
+      </div>
+      <div class="mindset-item">
+        見るのは<strong>プロンプトログとGitのコミット履歴だけ</strong>でOKです。コードは読まなくていいです。
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>ペア構成と座席</h2>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-badge badge-1">ペア<br />A</div>
+        <div class="step-body">
+          <div class="step-title">チーム① ⇄ チーム②</div>
+          <div class="step-desc">
+            ノートPCを向かい合わせにして、お互いの画面を共有しながら進めてください。
+          </div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-badge badge-2">ペア<br />B</div>
+        <div class="step-body">
+          <div class="step-title">チーム③ ⇄ チーム④</div>
+          <div class="step-desc">
+            ノートPCを向かい合わせにして、お互いの画面を共有しながら進めてください。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>60分の流れ</h2>
+    <div class="tl">
+      <div class="tl-row">
+        <div class="tl-time">00〜10分</div>
+        <div class="tl-body">
+          <div class="tl-title">成果物の受け渡し・動作デモ確認</div>
+          <div class="tl-desc">
+            相手チームのデモを2分で見る。「何を作ったか」を掴むだけでOK。
+          </div>
+          <div class="tl-note">動いてるかどうかの評価は不要です。</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">10〜20分</div>
+        <div class="tl-body">
+          <div class="tl-title">プロンプトログとGitコミット履歴を読む</div>
+          <div class="tl-desc">
+            相手チームの「判断の痕跡」を追う。AIに何を聞いて、どんな順番で作業したかを見てください。
+          </div>
+          <div class="tl-note">コードは読まなくていいです。</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">20〜30分</div>
+        <div class="tl-body">
+          <div class="tl-title">FBシートを記入する</div>
+          <div class="tl-desc">
+            下のStep1〜3を10分で書く。このあとの口頭FBで使います。
+          </div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">30〜55分</div>
+        <div class="tl-body">
+          <div class="tl-title">口頭フィードバック</div>
+          <div class="tl-desc">
+            チューターの進行に沿って、Step1→2→3の順で話し合います。
+          </div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">55〜60分</div>
+        <div class="tl-body">
+          <div class="tl-title">まとめ・発表準備</div>
+          <div class="tl-desc">
+            チューターから一言。このあとの発表に使えるメモを整理してください。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>FBシート</h2>
+    <p style="font-size: 0.82rem; color: #888; margin-bottom: 16px">
+      レビュー元チーム：＿＿＿＿　　レビュー担当チーム：＿＿＿＿
+    </p>
+
+    <div style="display: grid; gap: 12px">
+      <div class="sheet-box">
+        <div class="sheet-head">
+          <div class="sheet-num">1</div>
+          <div class="sheet-title">事実確認</div>
+          <div class="sheet-sub">5分</div>
+        </div>
+        <div class="sheet-body">
+          <div class="sheet-q">
+            プロンプトログを見て、一番印象に残った「判断」はどれ？
+          </div>
+          <div style="margin-bottom: 12px">
+            <div style="font-size: 0.78rem; color: #aaa; margin-bottom: 4px">
+              AIへの問いかけで印象に残ったもの
+            </div>
+            <textarea
+              class="sheet-field"
+              placeholder="例：最初のプロンプトがすごく具体的だった、など"
+            ></textarea>
+          </div>
+          <div>
+            <div style="font-size: 0.78rem; color: #aaa; margin-bottom: 4px">
+              Gitコミット履歴で「なぜこうしたんだろう」と思ったもの
+            </div>
+            <textarea
+              class="sheet-field"
+              placeholder="例：このコミットメッセージだと何をしたかわからない、など"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="sheet-box">
+        <div class="sheet-head">
+          <div class="sheet-num">2</div>
+          <div class="sheet-title">ギャップ共有</div>
+          <div class="sheet-sub">10分</div>
+        </div>
+        <div class="sheet-body">
+          <div class="sheet-q">自分たちだったら、ここどう判断した？</div>
+          <div class="table-wrap">
+            <table>
+              <tr>
+                <th style="width: 33%">相手チームの判断</th>
+                <th style="width: 33%">自分たちだったらこうした</th>
+                <th style="width: 33%">なぜ違う？</th>
+              </tr>
+              <tr>
+                <td><textarea placeholder="相手の判断を書く"></textarea></td>
+                <td>
+                  <textarea placeholder="自分たちの判断を書く"></textarea>
+                </td>
+                <td><textarea placeholder="違いの理由を書く"></textarea></td>
+              </tr>
+              <tr>
+                <td><textarea placeholder=""></textarea></td>
+                <td><textarea placeholder=""></textarea></td>
+                <td><textarea placeholder=""></textarea></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="sheet-box">
+        <div class="sheet-head">
+          <div class="sheet-num">3</div>
+          <div class="sheet-title">提案</div>
+          <div class="sheet-sub">10分</div>
+        </div>
+        <div class="sheet-body">
+          <div class="sheet-q">
+            もう一回やるとしたら、ここ変えてみて、という一個を伝える
+          </div>
+          <div style="margin-bottom: 12px">
+            <div style="font-size: 0.78rem; color: #aaa; margin-bottom: 4px">
+              変えてみてほしいこと
+            </div>
+            <textarea
+              class="sheet-field"
+              placeholder="一個だけ具体的に"
+            ></textarea>
+          </div>
+          <div>
+            <div style="font-size: 0.78rem; color: #aaa; margin-bottom: 4px">
+              そう思った理由
+            </div>
+            <textarea
+              class="sheet-field"
+              placeholder="自分たちの体験と比べてどう思った？"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="sheet-box">
+        <div class="sheet-head">
+          <div
+            style="
+              width: 24px;
+              height: 24px;
+              border-radius: 4px;
+              background: #f0f0ee;
+              border: 1px solid #e0e0e0;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              flex-shrink: 0;
+            "
+          >
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path
+                d="M2 6h8M6 2v8"
+                stroke="#888"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <div class="sheet-title">発表用メモ</div>
+        </div>
+        <div class="sheet-body">
+          <div class="sheet-q">
+            このあとの発表でそのまま使えるよう、ここに整理しておく
+          </div>
+          <div style="margin-bottom: 12px">
+            <div style="font-size: 0.78rem; color: #aaa; margin-bottom: 4px">
+              一番伝えたいこと（1つ）
+            </div>
+            <textarea
+              class="sheet-field"
+              placeholder="相手チームへのFBで一番伝えたかったこと"
+            ></textarea>
+          </div>
+          <div>
+            <div style="font-size: 0.78rem; color: #aaa; margin-bottom: 4px">
+              自分たちも同じだったな、と気づいたこと
+            </div>
+            <textarea
+              class="sheet-field"
+              placeholder="レビューして気づいた自チームへの気づき"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    チューターは答えを教えません。でも詰まったら「今こういう状況です」と共有してください。
+  </div>
+</div>

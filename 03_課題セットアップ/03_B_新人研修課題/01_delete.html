@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>仕様書 01 - タスクの削除</title>
+<style>
+  body { font-family: sans-serif; max-width: 720px; margin: 48px auto; padding: 0 24px; color: #1a1a1a; line-height: 1.7; background: #fff; }
+  h1 { font-size: 1.3rem; font-weight: 600; border-bottom: 2px solid #1a1a1a; padding-bottom: 8px; margin-bottom: 4px; }
+  .meta { font-size: 0.8rem; color: #888; margin-bottom: 32px; }
+  h2 { font-size: 1rem; font-weight: 600; margin-top: 36px; margin-bottom: 8px; }
+  p { margin: 0 0 12px; font-size: 0.92rem; }
+  ul { margin: 0 0 12px; padding-left: 20px; font-size: 0.92rem; }
+  li { margin-bottom: 4px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-bottom: 12px; }
+  th { background: #f4f4f4; text-align: left; padding: 7px 10px; border: 1px solid #ddd; font-weight: 600; }
+  td { padding: 7px 10px; border: 1px solid #ddd; vertical-align: top; }
+  code { font-family: monospace; font-size: 0.88rem; background: #f4f4f4; padding: 1px 5px; border-radius: 3px; }
+  .note { background: #fffbe6; border-left: 3px solid #f0c040; padding: 10px 14px; font-size: 0.85rem; margin: 12px 0; }
+</style>
+</head>
+<body>
+
+<h1>機能追加仕様書 ／ タスクの削除</h1>
+<div class="meta">区分：基本課題（★1） ／ 全チーム必須</div>
+
+<h2>背景</h2>
+<p>現在のアプリはタスクを登録・表示することができる。しかし、一度登録したタスクを消す方法がないため、完了したタスクや誤って入力したタスクが一覧に残り続ける問題がある。</p>
+
+<h2>追加してほしい機能</h2>
+<p>ユーザーが任意のタスクを削除できるようにしてほしい。</p>
+
+<h2>要件</h2>
+<ul>
+  <li>各タスクに対して削除できること</li>
+  <li>削除したタスクは一覧から消えること</li>
+  <li>ページのリロードは不要</li>
+</ul>
+
+<h2>現在の実装（参考）</h2>
+<table>
+  <tr><th>項目</th><th>内容</th></tr>
+  <tr><td>タスクデータ</td><td><code>tasks</code>という配列にタスクが格納されている</td></tr>
+  <tr><td>表示方法</td><td><code>v-for</code>でリスト表示している</td></tr>
+  <tr><td>登録方法</td><td>入力欄＋ボタンで配列にデータを追加している</td></tr>
+</table>
+
+<h2>備考</h2>
+<ul>
+  <li>UIのデザインはチームで自由に決めてよい</li>
+  <li>不明な点はまずチームで方針を決めてから対応すること</li>
+</ul>
+
+<div class="note">
+  本仕様書に書かれていない挙動については、チームで判断して実装すること。
+</div>
+
+</body>
+</html>
