@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>プロンプトログ管理ガイド</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: sans-serif;
+        background: #fafaf8;
+        color: #1a1a1a;
+        min-height: 100vh;
+        padding: 48px 24px;
+      }
+      .container {
+        max-width: 680px;
+        margin: 0 auto;
+      }
+
+      .header {
+        margin-bottom: 48px;
+      }
+      .header-label {
+        font-size: 0.75rem;
+        color: #aaa;
+        margin-bottom: 10px;
+        letter-spacing: 0.05em;
+      }
+      .header h1 {
+        font-size: 1.65rem;
+        font-weight: 700;
+        line-height: 1.35;
+        margin-bottom: 6px;
+      }
+      .header-sub {
+        font-size: 0.88rem;
+        color: #888;
+      }
+
+      .section {
+        margin-bottom: 44px;
+      }
+      h2 {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      h2::before {
+        content: "";
+        display: inline-block;
+        width: 4px;
+        height: 1em;
+        background: #1a1a1a;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+
+      p {
+        font-size: 0.92rem;
+        line-height: 1.85;
+        margin-bottom: 12px;
+        color: #444;
+      }
+
+      .what-box {
+        background: #fff;
+        border: 1px solid #ebebeb;
+        border-radius: 8px;
+        padding: 20px 22px;
+      }
+      .what-box p {
+        margin-bottom: 8px;
+      }
+      .what-box p:last-child {
+        margin-bottom: 0;
+      }
+
+      .pre-box {
+        background: #fffbe6;
+        border: 1px solid #f0e08a;
+        border-radius: 8px;
+        padding: 16px 20px;
+        margin-bottom: 0;
+      }
+      .pre-box-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #a07800;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .pre-box p {
+        font-size: 0.88rem;
+        color: #5a4400;
+        margin-bottom: 0;
+        line-height: 1.75;
+      }
+
+      /* ── ステップリスト ── */
+      .step-list {
+        display: grid;
+        gap: 8px;
+      }
+      .step-item {
+        display: grid;
+        grid-template-columns: 56px 1fr;
+        border: 1px solid #ebebeb;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #fff;
+      }
+      .step-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #fff;
+        padding: 12px 8px;
+        text-align: center;
+        line-height: 1.4;
+      }
+      .step-badge-1 {
+        background: #1a1a1a;
+      }
+      .step-badge-2 {
+        background: #888;
+      }
+      .step-badge-3 {
+        background: #bbb;
+      }
+      .step-body {
+        padding: 14px 16px;
+      }
+      .step-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 3px;
+      }
+      .step-desc {
+        font-size: 0.82rem;
+        color: #777;
+        line-height: 1.6;
+      }
+
+      /* ── フィールドリスト ── */
+      .field-list {
+        display: grid;
+        gap: 8px;
+      }
+      .field-item {
+        display: grid;
+        grid-template-columns: 148px 1fr;
+        border: 1px solid #ebebeb;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #fff;
+      }
+      .field-key {
+        background: #f5f5f3;
+        border-right: 1px solid #ebebeb;
+        padding: 12px 14px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: #555;
+        display: flex;
+        align-items: center;
+        line-height: 1.5;
+      }
+      .field-val {
+        padding: 12px 14px;
+        font-size: 0.82rem;
+        color: #555;
+        line-height: 1.65;
+      }
+
+      /* ── ディレクトリツリー ── */
+      .dir-box {
+        background: #1a1a1a;
+        border-radius: 8px;
+        padding: 18px 20px;
+        margin-bottom: 16px;
+      }
+      .dir-box pre {
+        font-family: monospace;
+        font-size: 0.82rem;
+        color: #a8d8a8;
+        line-height: 1.85;
+        white-space: pre;
+      }
+      .dir-box .dim {
+        color: #5a7a5a;
+      }
+
+      /* ── コードブロック ── */
+      .code-box {
+        background: #fff;
+        border: 1px solid #ebebeb;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 0;
+      }
+      .code-box-header {
+        background: #f5f5f3;
+        border-bottom: 1px solid #ebebeb;
+        padding: 8px 14px;
+        font-size: 0.75rem;
+        color: #aaa;
+        letter-spacing: 0.04em;
+      }
+      .code-box pre {
+        font-family: monospace;
+        font-size: 0.82rem;
+        color: #333;
+        line-height: 1.85;
+        padding: 16px 20px;
+        overflow-x: auto;
+        white-space: pre;
+      }
+      .code-box .md-h1 {
+        color: #1a1a1a;
+        font-weight: 700;
+      }
+      .code-box .md-h2 {
+        color: #1a5fa8;
+        font-weight: 600;
+      }
+      .code-box .md-url {
+        color: #1a5fa8;
+      }
+
+      /* ── mindset風ボックス ── */
+      .mindset-list {
+        display: grid;
+        gap: 10px;
+      }
+      .mindset-item {
+        background: #fff;
+        border: 1px solid #ebebeb;
+        border-radius: 8px;
+        padding: 16px 20px;
+        font-size: 0.9rem;
+        line-height: 1.8;
+        color: #444;
+      }
+      .mindset-item strong {
+        color: #1a1a1a;
+      }
+
+      /* ── フロー（番号付き手順） ── */
+      .flow-list {
+        display: grid;
+        gap: 0;
+        border: 1px solid #ebebeb;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .flow-item {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        padding: 14px 18px;
+        border-bottom: 1px solid #f0f0ee;
+        background: #fff;
+      }
+      .flow-item:last-child {
+        border-bottom: none;
+      }
+      .flow-num {
+        width: 24px;
+        height: 24px;
+        background: #1a1a1a;
+        color: #fff;
+        font-size: 0.72rem;
+        font-weight: 700;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .flow-body {
+        flex: 1;
+      }
+      .flow-title {
+        font-size: 0.88rem;
+        font-weight: 600;
+        margin-bottom: 3px;
+        color: #1a1a1a;
+      }
+      .flow-desc {
+        font-size: 0.82rem;
+        color: #777;
+        line-height: 1.6;
+      }
+
+      /* ── サンプル切り替えタブ ── */
+      .sample-tabs {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 12px;
+      }
+      .stab {
+        background: none;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        color: #888;
+        cursor: pointer;
+        font-family: sans-serif;
+        font-size: 0.78rem;
+        padding: 5px 14px;
+        transition: all 0.12s;
+      }
+      .stab:hover {
+        background: #f5f5f3;
+        color: #333;
+      }
+      .stab.active {
+        background: #1a1a1a;
+        border-color: #1a1a1a;
+        color: #fff;
+      }
+      .sample-pane {
+        display: none;
+      }
+      .sample-pane.active {
+        display: block;
+      }
+
+      .footer {
+        font-size: 0.75rem;
+        color: #bbb;
+        text-align: center;
+        margin-top: 52px;
+        padding-top: 20px;
+        border-top: 1px solid #ebebeb;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="header-label">研修生向け ／ 成果物ガイド</div>
+        <h1>プロンプトログ管理ガイド</h1>
+        <div class="header-sub">
+          AIとのやり取りを記録し、クロスレビューで見せられる成果物にするための方針と書き方。
+        </div>
+      </div>
+
+      <!-- ── なぜ残すのか ── -->
+      <div class="section">
+        <h2>なぜログを残すのか</h2>
+        <div class="what-box">
+          <p>
+            AIとのやり取り内容は「その場で終わり」にしない。チームの<strong>思考プロセスを可視化</strong>して、クロスレビューで他チームが読める成果物にする。
+          </p>
+          <p>
+            クロスレビューでは「AIの回答をそのまま使ってそうか」が確認される。ログに<strong>「なぜその判断にしたか」が書かれていれば、自分で考えた証拠</strong>になる。
+          </p>
+        </div>
+      </div>
+
+      <!-- ── 基本方針 ── -->
+      <div class="section">
+        <h2>基本方針</h2>
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-badge step-badge-1">機能<br />ごと</div>
+            <div class="step-body">
+              <div class="step-title">機能ごとにフォルダとファイルを分ける</div>
+              <div class="step-desc">
+                タスク表示・登録・削除など、1機能＝1ファイルの粒度で管理する。同じチャットで複数機能を相談していた場合も、機能ごとに抽出して別ファイルにまとめる。
+              </div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-badge step-badge-1">判断<br />を残す</div>
+            <div class="step-body">
+              <div class="step-title">設計判断を必ず記録する</div>
+              <div class="step-desc">
+                AIが提示した案の中から「なぜこれを選んだか」を書く。採用しなかった案とその理由も同様に残す。「なんとなく」は記録にならない。
+              </div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-badge step-badge-2">URL<br />貼る</div>
+            <div class="step-body">
+              <div class="step-title">
+                共有チャットURLをエビデンスとして貼る
+              </div>
+              <div class="step-desc">
+                詳細はURLで参照できれば十分。ただしURLだけでは文脈が消えるため、要約は必ず書く。全文ログを保存したい場合は同じ機能フォルダ内に補助資料として置く。
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 記録に含める要素 ── -->
+      <div class="section">
+        <h2>記録に含める要素</h2>
+        <p>主記録には、少なくとも以下の4要素を含めること。</p>
+        <div class="field-list">
+          <div class="field-item">
+            <div class="field-key">AIとのやり取り要約</div>
+            <div class="field-val">
+              何を相談し、どんな案が出たか。複数回やり取りした場合は、この機能に関係する部分だけを抽出して要約する。
+            </div>
+          </div>
+          <div class="field-item">
+            <div class="field-key">人間側の意思決定・判断</div>
+            <div class="field-val">
+              最終的に何を採用したか、何を採用しなかったか、なぜその判断にしたか。
+            </div>
+          </div>
+          <div class="field-item">
+            <div class="field-key">実施したアクション</div>
+            <div class="field-val">
+              実際に行った修正、コンポーネントや責務の分け方、チーム内やチューターへの相談内容。
+            </div>
+          </div>
+          <div class="field-item">
+            <div class="field-key">エビデンス</div>
+            <div class="field-val">
+              共有チャットURL（必須）。補助資料がある場合はそのファイル名も記載する。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ディレクトリ構成 ── -->
+      <div class="section">
+        <h2>ディレクトリ構成</h2>
+
+        <p>共有チャットURLをMarkdown内に記載するだけなら最小構成でOK。</p>
+        <div class="dir-box">
+          <pre>docs/
+  課題01/
+    must01_completion_toggle.md    <span class="dim"># 完了切り替え機能のログ</span>
+  課題02/
+    must02_delete.md               <span class="dim"># 削除機能のログ</span>
+  課題03/
+    must03_priority.md             <span class="dim"># 優先度機能のログ</span></pre>
+        </div>
+
+        <p>
+          全文ログやエクスポートデータも保存する場合は、同じ機能フォルダ内に補助資料を置く。
+        </p>
+        <div class="dir-box">
+          <pre>docs/
+  課題01/
+    must01_completion_toggle.md         <span class="dim"># 主記録（要約・判断）</span>
+    must01_completion_toggle_output.md  <span class="dim"># 補助資料（全文ログなど）</span>
+  課題02/
+    must02_delete.md
+    must02_delete_output.md</pre>
+        </div>
+      </div>
+
+      <!-- ── テンプレート ── -->
+      <div class="section">
+        <h2>Markdownテンプレート</h2>
+        <p>以下をコピーして使う。各セクションは省略しないこと。</p>
+        <div class="code-box">
+          <div class="code-box-header">機能名_ログ.md</div>
+          <pre><span class="md-h1"># タイトル</span>
+
+<span class="md-h2">## 対象</span>
+- 機能名: 〇〇
+- 担当者: 〇〇
+
+<span class="md-h2">## この記録で扱う内容</span>
+- この機能について、どの仕様解釈・設計判断を記録するのかを書く
+
+<span class="md-h2">## AIとのやり取り要約</span>
+- AIに何を相談したか
+- AIがどのような案を出したか
+- 複数回やり取りした場合は、この機能に関係する部分だけを要約して残す
+
+<span class="md-h2">## 人間側の意思決定・判断</span>
+- 最終的に何を採用したか
+- 何を採用しなかったか
+- なぜその判断にしたか
+
+<span class="md-h2">## 実施したアクション</span>
+- 実際に行った修正
+- コンポーネントや責務の分け方
+- チーム内やチューターへ相談した内容
+
+<span class="md-h2">## エビデンス</span>
+- 共有チャットURL: <span class="md-url">https://...</span>
+- 補助資料がある場合:
+  - task_xxx_chat_output.md</pre>
+        </div>
+      </div>
+
+      <!-- ── 書き方の流れ ── -->
+      <div class="section">
+        <h2>書き方の流れ</h2>
+        <div class="flow-list">
+          <div class="flow-item">
+            <div class="flow-num">1</div>
+            <div class="flow-body">
+              <div class="flow-title">
+                実装を始める前にファイルだけ作っておく
+              </div>
+              <div class="flow-desc">
+                命名規則に従って docs/課題XX/機能名.md
+                を作成する。空ファイルでOK。後から書こうとすると忘れる。
+              </div>
+            </div>
+          </div>
+          <div class="flow-item">
+            <div class="flow-num">2</div>
+            <div class="flow-body">
+              <div class="flow-title">
+                AIに相談しながら「やり取り要約」をその都度メモする
+              </div>
+              <div class="flow-desc">
+                後から振り返ろうとすると忘れる。相談した直後に、何を聞いて何が返ってきたかを箇条書きで残す。
+              </div>
+            </div>
+          </div>
+          <div class="flow-item">
+            <div class="flow-num">3</div>
+            <div class="flow-body">
+              <div class="flow-title">採用・不採用の判断理由をその場で書く</div>
+              <div class="flow-desc">
+                「なぜそうしたか」は時間が経つほど書けなくなる。判断したその瞬間に理由を書いておく。
+              </div>
+            </div>
+          </div>
+          <div class="flow-item">
+            <div class="flow-num">4</div>
+            <div class="flow-body">
+              <div class="flow-title">
+                実装が終わったらアクションと共有URLを追記してコミット
+              </div>
+              <div class="flow-desc">
+                機能実装のコミットと一緒にログファイルもコミットする。プロンプトログは成果物の一部として扱われる。
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 記入サンプル ── -->
+      <div class="section">
+        <h2>記入サンプル</h2>
+        <p>実際にどう書くか、2パターンのサンプルを参考にしてほしい。</p>
+
+        <div class="sample-tabs">
+          <button class="stab active" onclick="showSample('s1', this)">
+            サンプル1：タスク表示
+          </button>
+          <button class="stab" onclick="showSample('s2', this)">
+            サンプル2：タスク登録
+          </button>
+        </div>
+
+        <div class="sample-pane active" id="s1">
+          <div class="code-box">
+            <div class="code-box-header">must01_task_display.md</div>
+            <pre><span class="md-h1"># タスク表示機能の設計方針</span>
+
+<span class="md-h2">## 対象</span>
+- 機能名: タスク表示
+- 担当者: 山田
+
+<span class="md-h2">## この記録で扱う内容</span>
+- タスク一覧表示をどのコンポーネントが担当するか
+- 完了状態の表示をどこで判定するか
+
+<span class="md-h2">## AIとのやり取り要約</span>
+- AIに、Vue でタスク一覧を表示する場合のコンポーネント分割を相談した
+- AIは、親コンポーネントで配列を管理し、子コンポーネントで1件分を
+  表示する案を提示した
+- あわせて、完了状態に応じた見た目の切り替えは、子コンポーネント側で
+  props を受け取って判定する案を提示した
+
+<span class="md-h2">## 人間側の意思決定・判断</span>
+- 一覧全体の描画は親コンポーネントが担当し、1件ごとの表示は
+  子コンポーネントに分ける方針を採用した
+- 理由: 一覧データの責務と1件表示の責務を分けた方が、今後の機能追加時にも
+  見通しがよいと判断したため
+- 一覧全体のループ処理まで子コンポーネントに持たせる案は採用しなかった
+- 不採用の理由: 親が配列を管理しているのに表示責務まで子に寄せると、
+  役割が分かりにくくなるため
+
+<span class="md-h2">## 実施したアクション</span>
+- TodoList.vue でタスク配列を受け取り、v-for で一覧描画する形にした
+- TodoItem.vue を作成し、タイトルと完了状態の見た目を担当させた
+- TodoItem.vue には title と isDone を props で渡す形にした
+- 完了済みタスクの見た目は、クラス切り替えで表現する方針にした
+
+<span class="md-h2">## エビデンス</span>
+- 共有チャットURL: <span class="md-url">https://example.com/chat/task-list-display</span></pre>
+          </div>
+        </div>
+
+        <div class="sample-pane" id="s2">
+          <div class="code-box">
+            <div class="code-box-header">must02_task_create.md</div>
+            <pre><span class="md-h1"># タスク登録機能の設計方針</span>
+
+<span class="md-h2">## 対象</span>
+- 機能名: タスク登録
+- 担当者: 伊藤
+
+<span class="md-h2">## この記録で扱う内容</span>
+- タスク登録フォームの責務をどこまで持たせるか
+- 登録後の一覧更新をどう扱うか
+
+<span class="md-h2">## AIとのやり取り要約</span>
+- AIに、Vue でタスク登録フォームを実装する場合の責務分割を相談した
+- AIは、入力欄コンポーネントで文字列を管理し、登録ボタン押下時に
+  親へイベントを送る案を提示した
+- あわせて、空文字チェックなどの簡易バリデーションはフォーム側で
+  行う案を提示した
+
+<span class="md-h2">## 人間側の意思決定・判断</span>
+- 入力フォームは TaskForm.vue として分け、入力値の管理と
+  送信イベント発火を担当させる方針を採用した
+- 理由: 入力UIと一覧管理を分けた方が、責務が明確になるため
+- 登録後のタスク一覧更新は親コンポーネント側で行う方針を採用した
+- 理由: 一覧データの管理責任は親に置いた方が自然だから
+- 一覧側コンポーネントで入力値まで直接管理する案は採用しなかった
+
+<span class="md-h2">## 実施したアクション</span>
+- TaskForm.vue を作成し、入力欄と登録ボタンを配置した
+- v-model で入力値を管理する形にした
+- 登録ボタン押下時に emit で親へ値を渡すようにした
+- 親コンポーネント側で新しいタスクを配列へ追加する処理を実装した
+- 空文字入力時は登録しないよう、フォーム送信前にチェックを入れた
+
+<span class="md-h2">## エビデンス</span>
+- 共有チャットURL: <span class="md-url">https://example.com/chat/task-create</span></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 注意事項 ── -->
+      <div class="section">
+        <h2>注意事項</h2>
+        <div class="mindset-list">
+          <div class="mindset-item">
+            同じチャットで複数の機能を相談していた場合も、<strong>記録は機能ごとに分けて抽出する</strong>。1ファイル＝1機能の粒度を守ること。
+          </div>
+          <div class="mindset-item">
+            <strong>URLだけ貼って終わり、にしない。</strong
+            >リンク先が読めなくなるリスクがある。要約セクションは必ず埋めること。
+          </div>
+          <div class="mindset-item">
+            プロンプトログは<strong>実装コミットと一緒にコミット</strong>する。後からまとめて書こうとすると判断の理由が消える。その場で書くこと。
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        迷ったら「1機能・1ファイル・判断の理由まで書く」を守るだけでOK。
+      </div>
+    </div>
+
+    <script>
+      function showSample(id, btn) {
+        document
+          .querySelectorAll(".sample-pane")
+          .forEach((p) => p.classList.remove("active"));
+        document
+          .querySelectorAll(".stab")
+          .forEach((b) => b.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+        btn.classList.add("active");
+      }
+    </script>
+  </body>
+</html>
