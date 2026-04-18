@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Windows 11 向け Node.js インストール手順書</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: sans-serif;
+      background: #fafaf8;
+      color: #1a1a1a;
+      padding: 48px 24px;
+    }
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .header {
+      margin-bottom: 48px;
+    }
+    .header-label {
+      font-size: 0.75rem;
+      color: #aaa;
+      margin-bottom: 10px;
+      letter-spacing: 0.05em;
+    }
+    .header h1 {
+      font-size: 1.65rem;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 6px;
+    }
+    .header-sub {
+      font-size: 0.88rem;
+      color: #888;
+    }
+    .section {
+      margin-bottom: 44px;
+    }
+    h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h2::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 1em;
+      background: #1a1a1a;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    p {
+      font-size: 0.92rem;
+      line-height: 1.85;
+      margin-bottom: 12px;
+      color: #444;
+    }
+    a {
+      color: #1a1a1a;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    a:hover {
+      color: #444;
+    }
+
+    /* カード */
+    .card-grid {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .card-grid.cols-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+    .card-grid.cols-3 {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    .info-card {
+      background: #fff;
+      border: 1px solid #ebebeb;
+      border-radius: 8px;
+      padding: 16px 18px;
+    }
+    .info-card .card-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #aaa;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .info-card p {
+      font-size: 0.85rem;
+      color: #555;
+      margin-bottom: 0;
+      line-height: 1.7;
+    }
+
+    /* ステップ */
+    .step-list {
+      display: grid;
+      gap: 1px;
+      background: #ebebeb;
+      border: 1px solid #ebebeb;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .step-item {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      background: #fff;
+    }
+    .step-num {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 16px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #fff;
+      background: #1a1a1a;
+    }
+    .step-num span {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+    }
+    .step-body {
+      padding: 16px 18px;
+    }
+    .step-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #1a1a1a;
+    }
+    .step-desc {
+      font-size: 0.85rem;
+      color: #666;
+      line-height: 1.7;
+      margin-bottom: 0;
+    }
+
+    /* コードブロック */
+    .code-wrap {
+      position: relative;
+      margin-top: 10px;
+    }
+    pre {
+      margin: 0;
+      background: #0f172a;
+      color: #e5eefc;
+      border-radius: 8px;
+      padding: 14px 16px;
+      overflow-x: auto;
+      font-size: 0.82rem;
+      line-height: 1.7;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+    }
+    code {
+      font-family: "Consolas", "Cascadia Code", monospace;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      border: none;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 0.72rem;
+      cursor: pointer;
+    }
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    /* ダウンロードリンク */
+    .dl-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .dl-link {
+      display: inline-block;
+      padding: 8px 14px;
+      border: 1px solid #ebebeb;
+      border-radius: 6px;
+      background: #fff;
+      font-size: 0.82rem;
+      color: #1a1a1a;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .dl-link:hover {
+      border-color: #ccc;
+      background: #f7f7f5;
+    }
+
+    /* チェックリスト */
+    ul.checklist {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    ul.checklist li {
+      font-size: 0.85rem;
+      color: #555;
+      line-height: 1.8;
+      padding-left: 18px;
+      position: relative;
+    }
+    ul.checklist li::before {
+      content: "–";
+      position: absolute;
+      left: 0;
+      color: #bbb;
+    }
+
+    /* ノート系 */
+    .note {
+      background: #f7f7f5;
+      border-left: 2px solid #ccc;
+      border-radius: 0 6px 6px 0;
+      padding: 12px 14px;
+      margin-top: 10px;
+      font-size: 0.82rem;
+      color: #666;
+      line-height: 1.75;
+    }
+    .success {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: #166534;
+      line-height: 1.75;
+    }
+    .success strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+    .warning {
+      background: #fffbe6;
+      border: 1px solid #f0e08a;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: #5a4400;
+      line-height: 1.75;
+    }
+
+    /* トラブルカード */
+    .trouble-list {
+      display: grid;
+      gap: 10px;
+    }
+    .trouble-card {
+      background: #fff;
+      border: 1px solid #ebebeb;
+      border-radius: 8px;
+      padding: 16px 18px;
+    }
+    .trouble-card h3 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #1a1a1a;
+    }
+
+    /* 参考リンク */
+    .link-card {
+      background: #fff;
+      border: 1px solid #ebebeb;
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin-bottom: 10px;
+    }
+    .link-card h3 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #1a1a1a;
+    }
+
+    .footer {
+      font-size: 0.75rem;
+      color: #bbb;
+      text-align: center;
+      margin-top: 52px;
+      padding-top: 20px;
+      border-top: 1px solid #ebebeb;
+    }
+
+    @media (max-width: 480px) {
+      .card-grid.cols-2,
+      .card-grid.cols-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="header">
+      <div class="header-label">研修生向け ／ 事前準備</div>
+      <h1>Node.js インストール手順書</h1>
+      <div class="header-sub">Windows 11 / Node.js / npm ／ 想定所要時間：10〜15分</div>
+    </div>
+
+    <div class="section">
+      <h2>この手順書で行うこと</h2>
+      <div class="card-grid cols-3">
+        <div class="info-card">
+          <div class="card-label">使用するもの</div>
+          <p><strong>Node.js 24 LTS</strong><br>npm は Node.js に含まれます。</p>
+        </div>
+        <div class="info-card">
+          <div class="card-label">ここではやらないこと</div>
+          <p><strong>GitHub リポジトリのクローン</strong><br>研修当日に行います。</p>
+        </div>
+        <div class="info-card">
+          <div class="card-label">確認すること</div>
+          <p><strong>PowerShell でバージョンが表示されること</strong><br><code>node -v</code> と <code>npm -v</code> が通れば成功。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>事前確認</h2>
+      <div class="card-grid cols-2">
+        <div class="info-card">
+          <div class="card-label">使用する PC</div>
+          <ul class="checklist">
+            <li>Windows 11 が起動していること</li>
+            <li>インターネットへ接続できること</li>
+            <li>ブラウザが使えること</li>
+            <li>PowerShell が起動できること</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <div class="card-label">今回の前提</div>
+          <ul class="checklist">
+            <li>Node.js はまだ入っていない想定です</li>
+            <li>npm を別で入れる必要はありません</li>
+            <li>PowerShell は通常の起動で問題ありません</li>
+            <li>必要な場合のみインストーラーが管理者権限の確認を表示します</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>インストール手順</h2>
+      <div class="step-list">
+
+        <div class="step-item">
+          <div class="step-num"><span>1</span></div>
+          <div class="step-body">
+            <div class="step-title">Node.js のダウンロードページを開く</div>
+            <p class="step-desc">
+              Node.js の公式ダウンロードページを開き、<strong>LTS</strong> の版を使用します。
+              2026年4月時点では Node.js <strong>24.14.1</strong> が最新 LTS です。
+            </p>
+            <div class="dl-list">
+              <a class="dl-link" href="https://nodejs.org/en/download" target="_blank" rel="noopener noreferrer">Node.js 公式ダウンロードページ</a>
+              <a class="dl-link" href="https://nodejs.org/en/blog/release/v24.14.1" target="_blank" rel="noopener noreferrer">Node.js 24.14.1 (LTS) リリース情報</a>
+            </div>
+            <div class="note">
+              <strong>今回ダウンロードするもの：</strong> 研修 PC は共通で 64bit のため <strong>Windows Installer (.msi) / x64</strong> を選んでください。<br>
+              確認する場合は [設定] &gt; [システム] &gt; [バージョン情報] で「システムの種類」に「64 ビット オペレーティング システム、x64 ベース プロセッサ」と表示されているか確認してください。
+            </div>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-num"><span>2</span></div>
+          <div class="step-body">
+            <div class="step-title">Node.js をインストールする</div>
+            <ol style="padding-left: 18px; margin: 0;">
+              <li style="font-size: 0.85rem; color: #555; line-height: 1.8;">ダウンロードした <code>.msi</code> ファイルをダブルクリックします。</li>
+              <li style="font-size: 0.85rem; color: #555; line-height: 1.8;">画面の案内に従って進めます。基本的には既定値のままで問題ありません。</li>
+              <li style="font-size: 0.85rem; color: #555; line-height: 1.8;">インストールが完了したら、いったん PowerShell を閉じます。</li>
+              <li style="font-size: 0.85rem; color: #555; line-height: 1.8;">PowerShell を開き直します。</li>
+            </ol>
+            <div class="note">
+              通常は管理者権限で PowerShell を開く必要はありません。必要な場合はインストーラーの途中で Windows の確認画面が表示されます。
+            </div>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-num"><span>3</span></div>
+          <div class="step-body">
+            <div class="step-title">Node.js と npm が入ったか確認する</div>
+            <p class="step-desc">PowerShell を開いて、次のコマンドを実行します。</p>
+            <div class="code-wrap">
+              <button class="copy-btn" data-copy-target="code-check">コピー</button>
+              <pre id="code-check"><code>node -v
+npm -v</code></pre>
+            </div>
+            <p class="step-desc" style="margin-top: 8px;">数字が表示されれば成功です。例: <code>v24.14.1</code>、<code>11.x.x</code> など。</p>
+            <div class="success">
+              <strong>成功の目安</strong>
+              PowerShell にバージョン番号が表示されれば、インストールは完了です。
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>トラブル対応</h2>
+      <div class="trouble-list">
+        <div class="trouble-card">
+          <h3><code>node</code> または <code>npm</code> が見つからない</h3>
+          <ul class="checklist">
+            <li>PowerShell を閉じて開き直す</li>
+            <li>Node.js のインストールが完了しているか確認する</li>
+            <li>それでも解消しなければ再インストールする</li>
+          </ul>
+        </div>
+        <div class="trouble-card">
+          <h3><code>npm.ps1 cannot be loaded ...</code> が出る</h3>
+          <p style="font-size: 0.85rem; color: #555; margin-bottom: 8px;">PowerShell の実行ポリシーが原因の可能性があります。</p>
+          <div class="code-wrap">
+            <button class="copy-btn" data-copy-target="code-policy">コピー</button>
+            <pre id="code-policy"><code>Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser</code></pre>
+          </div>
+          <p style="font-size: 0.78rem; color: #888; margin-top: 8px; margin-bottom: 0;">会社 PC ではポリシーが管理されている場合があります。その場合は担当者へ確認してください。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>参考リンク</h2>
+      <div class="link-card">
+        <h3>公式ページ</h3>
+        <ul class="checklist">
+          <li><a href="https://nodejs.org/en/download" target="_blank" rel="noopener noreferrer">Node.js 公式ダウンロード</a></li>
+          <li><a href="https://nodejs.org/en/blog/release/v24.14.1" target="_blank" rel="noopener noreferrer">Node.js 24.14.1 (LTS)</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer">わからないことはまずチームで。それでも詰まったらチューターへ。</div>
+
+  </div>
+
+  <script>
+    document.querySelectorAll('.copy-btn').forEach(function (button) {
+      button.addEventListener('click', async function () {
+        var targetId = button.getAttribute('data-copy-target');
+        var target = document.getElementById(targetId);
+        if (!target) return;
+        var text = target.innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+          var original = button.textContent;
+          button.textContent = 'コピー済み';
+          setTimeout(function () {
+            button.textContent = original;
+          }, 1200);
+        } catch (e) {
+          alert('コピーに失敗しました。手動で選択してコピーしてください。');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
