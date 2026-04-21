@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Git & GitHub 手順書</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: sans-serif;
+      background: #fafaf8;
+      color: #1a1a1a;
+      min-height: 100vh;
+      padding: 48px 24px;
+    }
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header {
+      margin-bottom: 48px;
+    }
+    .header-label {
+      font-size: 0.75rem;
+      color: #aaa;
+      margin-bottom: 10px;
+      letter-spacing: 0.05em;
+    }
+    .header h1 {
+      font-size: 1.65rem;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 6px;
+    }
+    .header-sub {
+      font-size: 0.88rem;
+      color: #888;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 44px;
+    }
+    h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h2::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 1em;
+      background: #1a1a1a;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    p {
+      font-size: 0.92rem;
+      line-height: 1.85;
+      margin-bottom: 12px;
+      color: #444;
+    }
+
+    /* Step list (chapter cards) */
+    .step-list {
+      display: grid;
+      gap: 8px;
+    }
+    .step-item {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      border: 1px solid #ebebeb;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .step-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #fff;
+      padding: 12px 8px;
+      text-align: center;
+      line-height: 1.4;
+      background: #1a1a1a;
+    }
+    .step-badge-2 { background: #555; }
+    .step-badge-3 { background: #888; }
+    .step-body {
+      padding: 14px 16px;
+    }
+    .step-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    .step-desc {
+      font-size: 0.82rem;
+      color: #777;
+      line-height: 1.6;
+    }
+
+    /* Timeline */
+    .tl {
+      padding-left: 16px;
+      border-left: 2px solid #e0e0e0;
+    }
+    .tl-row {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f0ee;
+    }
+    .tl-row:last-child { border-bottom: none; }
+    .tl-num {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #888;
+      min-width: 24px;
+      padding-top: 1px;
+    }
+    .tl-body { flex: 1; }
+    .tl-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .tl-desc {
+      font-size: 0.82rem;
+      color: #777;
+      line-height: 1.6;
+    }
+
+    /* Code block */
+    .code-block {
+      background: #f4f4f2;
+      border: 1px solid #e8e8e6;
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 10px 0;
+      font-family: "Menlo", "Consolas", monospace;
+      font-size: 0.82rem;
+      color: #1a1a1a;
+      line-height: 1.7;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    /* Note box */
+    .note-box {
+      background: #fffbe6;
+      border: 1px solid #f0e08a;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin: 10px 0;
+    }
+    .note-box p {
+      font-size: 0.84rem;
+      color: #5a4400;
+      margin-bottom: 0;
+      line-height: 1.7;
+    }
+
+    /* Info box */
+    .info-box {
+      background: #fff;
+      border: 1px solid #ebebeb;
+      border-radius: 8px;
+      padding: 18px 22px;
+      margin-bottom: 0;
+    }
+    .info-box p { margin-bottom: 8px; }
+    .info-box p:last-child { margin-bottom: 0; }
+
+    /* Reference links */
+    .ref-list {
+      display: grid;
+      gap: 8px;
+    }
+    .ref-item {
+      background: #fff;
+      border: 1px solid #ebebeb;
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .ref-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .ref-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+    .ref-url {
+      font-size: 0.8rem;
+      color: #1a1a1a;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      word-break: break-all;
+    }
+
+    /* Footer */
+    .footer {
+      font-size: 0.75rem;
+      color: #bbb;
+      text-align: center;
+      margin-top: 52px;
+      padding-top: 20px;
+      border-top: 1px solid #ebebeb;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-label">研修生向け ／ 当日配布</div>
+    <h1>Git & GitHub<br>インストール・初期設定 手順書</h1>
+    <div class="header-sub">新人研修 ／ セットアップ資料 ／ 2026年4月</div>
+  </div>
+
+  <!-- 概要 -->
+  <div class="section">
+    <h2>Gitってなに？</h2>
+    <div class="info-box">
+      <p>ソースコードの<strong>変更履歴を管理する</strong>ツールです。いつ・誰が・何を変えたかを記録し続けます。</p>
+      <p>GitHubはその記録をインターネット上に置いてチームで共有するサービスです。今日のハッカソンではチーム全員が同じリポジトリで作業するため、Git操作が必須です。</p>
+    </div>
+  </div>
+
+  <!-- 全体の流れ -->
+  <div class="section">
+    <h2>今日やること（全体像）</h2>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-badge">第1章</div>
+        <div class="step-body">
+          <div class="step-title">Gitをインストールする</div>
+          <div class="step-desc">公式サイトからダウンロードして、インストールの確認まで行う</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-badge step-badge-2">第2章</div>
+        <div class="step-body">
+          <div class="step-title">GitHubアカウントを作る</div>
+          <div class="step-desc">サインアップしてFreeプランで準備する</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-badge step-badge-3">第3章</div>
+        <div class="step-body">
+          <div class="step-title">GitとGitHubを連携する（SSH）</div>
+          <div class="step-desc">SSHキーを生成してGitHubに登録し、接続テストまで完了する</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第1章 -->
+  <div class="section">
+    <h2>第1章　Gitのインストール</h2>
+
+    <p>公式サイト <strong>https://git-scm.com/</strong> にアクセスして「Download for Windows」からインストーラーをダウンロードします。</p>
+    <p>ウィザードは基本的にすべてデフォルトのまま「Next」で進めてください。以下の3か所だけ確認してください。</p>
+
+    <div class="tl">
+      <div class="tl-row">
+        <div class="tl-num">①</div>
+        <div class="tl-body">
+          <div class="tl-title">エディタ選択</div>
+          <div class="tl-desc">初心者は「Notepad」を選択</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-num">②</div>
+        <div class="tl-body">
+          <div class="tl-title">初期ブランチ名</div>
+          <div class="tl-desc">「Let Git decide」を選択</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-num">③</div>
+        <div class="tl-body">
+          <div class="tl-title">PATH設定</div>
+          <div class="tl-desc">「Git from the command line and also from 3rd-party software」を選択</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box" style="margin-top:14px;">
+      <p>💡 インストール後はコマンドプロンプトまたはPowerShellを<strong>再起動</strong>してください。</p>
+    </div>
+
+    <p style="margin-top:16px;">インストールの確認：</p>
+    <div class="code-block">git --version</div>
+    <p><code style="background:#f0f0f0;padding:2px 6px;border-radius:4px;font-size:0.85rem;">git version 2.x.x</code> と表示されれば成功です。</p>
+
+    <p style="margin-top:16px;">初期設定（名前とメールアドレスを登録）：</p>
+    <div class="code-block">git config --global user.name "あなたの名前"
+git config --global user.email "your.email@example.com"</div>
+
+    <p>設定の確認：</p>
+    <div class="code-block">git config --list</div>
+  </div>
+
+  <!-- 第2章 -->
+  <div class="section">
+    <h2>第2章　GitHubアカウントの作成</h2>
+    <div class="tl">
+      <div class="tl-row">
+        <div class="tl-num">1</div>
+        <div class="tl-body">
+          <div class="tl-title">https://github.com/ にアクセス</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-num">2</div>
+        <div class="tl-body">
+          <div class="tl-title">「Sign up」をクリック</div>
+          <div class="tl-desc">メールアドレス・パスワード・ユーザー名を入力する</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-num">3</div>
+        <div class="tl-body">
+          <div class="tl-title">メール認証コードを入力</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-num">4</div>
+        <div class="tl-body">
+          <div class="tl-title">プラン選択で「Free」を選ぶ</div>
+          <div class="tl-desc">今日の研修ではFreeプランで十分です</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第3章 -->
+  <div class="section">
+    <h2>第3章　GitとGitHubの連携（SSH）</h2>
+    <p>SSHキーを生成してGitHubに登録することで、パスワードなしで安全に通信できます。</p>
+
+    <div class="tl">
+      <div class="tl-row">
+        <div class="tl-num">1</div>
+        <div class="tl-body">
+          <div class="tl-title">SSHキーを生成する</div>
+          <div class="tl-desc">コマンドプロンプトまたはPowerShellを開いて実行してください（メールアドレスはGitHubに登録したものを使用）。</div>
+        </div>
+      </div>
+    </div>
+    <div class="code-block">ssh-keygen -t ed25519 -C "your.email@example.com"</div>
+    <p>ファイルの保存先を聞かれたらそのままEnter。パスフレーズはセキュリティのため設定を推奨しますが、Enterを2回でスキップも可能です。</p>
+
+    <div class="tl" style="margin-top:16px;">
+      <div class="tl-row">
+        <div class="tl-num">2</div>
+        <div class="tl-body">
+          <div class="tl-title">公開鍵を表示してコピーする</div>
+        </div>
+      </div>
+    </div>
+    <div class="code-block">type %USERPROFILE%\.ssh\id_ed25519.pub</div>
+    <p><code style="background:#f0f0f0;padding:2px 6px;border-radius:4px;font-size:0.85rem;">ssh-ed25519 AAAA...</code> で始まる文字列が表示されます。<strong>この文字列をすべてコピー</strong>してください。</p>
+
+    <div class="tl" style="margin-top:16px;">
+      <div class="tl-row">
+        <div class="tl-num">3</div>
+        <div class="tl-body">
+          <div class="tl-title">GitHubに公開鍵を登録する</div>
+          <div class="tl-desc">GitHubにログイン → 右上アイコン → Settings → SSH and GPG keys → New SSH key</div>
+        </div>
+      </div>
+    </div>
+    <p style="margin-top:8px;">Title に分かりやすい名前（例：<code style="background:#f0f0f0;padding:2px 6px;border-radius:4px;font-size:0.85rem;">My Windows PC</code>）を入力し、Key に先ほどコピーした公開鍵を貼り付けて「Add SSH key」をクリックします。</p>
+
+    <div class="tl" style="margin-top:16px;">
+      <div class="tl-row">
+        <div class="tl-num">4</div>
+        <div class="tl-body">
+          <div class="tl-title">接続テストを実行する</div>
+        </div>
+      </div>
+    </div>
+    <div class="code-block">ssh -T git@github.com</div>
+    <p>初回は「Are you sure you want to continue connecting?」と聞かれるので <code style="background:#f0f0f0;padding:2px 6px;border-radius:4px;font-size:0.85rem;">yes</code> と入力してEnter。</p>
+    <div class="code-block">Hi &lt;ユーザー名&gt;! You've successfully authenticated...</div>
+    <p>上記が表示されれば設定完了です。</p>
+    <div class="note-box">
+      <p>💡 パスフレーズを設定した場合は、初回のみ入力が求められます。</p>
+    </div>
+  </div>
+
+  <!-- 参考情報 -->
+  <div class="section">
+    <h2>参考情報</h2>
+    <div class="ref-list">
+      <div class="ref-item">
+        <div class="ref-label">Qiita</div>
+        <div class="ref-title">[最初] Githubアカウントの作り方とリポジトリ作成まで</div>
+        <a class="ref-url" href="https://qiita.com/mana-tech/items/495bf8e49387b93517a1" target="_blank">https://qiita.com/mana-tech/items/495bf8e49387b93517a1</a>
+      </div>
+      <div class="ref-item">
+        <div class="ref-label">Kinsta</div>
+        <div class="ref-title">Gitをインストールする方法（Windows、macOS、Linux別）</div>
+        <a class="ref-url" href="https://kinsta.com/jp/blog/install-git/" target="_blank">https://kinsta.com/jp/blog/install-git/</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    わからないことはまずチームで。それでも詰まったらチューターへ。
+  </div>
+
+</div>
+</body>
+</html>
