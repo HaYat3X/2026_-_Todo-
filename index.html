@@ -1,806 +1,707 @@
 <!doctype html>
 <html lang="ja">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>2026 Todoアプリ開発ハッカソン — 資料ポータル</title>
-  <style>
-    @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap");
-
-    :root {
-      --bg: #f7f7f5;
-      --surface: #ffffff;
-      --surface2: #f0f0ec;
-      --border: #e4e4de;
-      --border2: #d0d0c8;
-      --text: #1a1a18;
-      --text2: #5a5a52;
-      --text3: #9a9a90;
-
-      --blue: #1a5fa8;
-      --blue-bg: #eef4fc;
-      --blue-bd: #a8c8f0;
-      --teal: #0f7c6a;
-      --teal-bg: #eef8f5;
-      --teal-bd: #9adace;
-      --amber: #c47d0e;
-      --amber-bg: #fef9ee;
-      --amber-bd: #f5d78a;
-      --coral: #c0392b;
-      --coral-bg: #fdf2f0;
-      --coral-bd: #f4b8b0;
-      --purple: #6b3fa0;
-      --purple-bg: #f4f0fc;
-      --purple-bd: #c8aae8;
-      --green: #2a7a4a;
-      --green-bg: #eef8f2;
-      --green-bd: #9ad4b8;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: "Noto Sans JP", sans-serif;
-      font-weight: 300;
-      line-height: 1.75;
-      min-height: 100vh;
-    }
-
-    /* ===== HEADER ===== */
-    header {
-      background: var(--surface);
-      border-bottom: 2px solid var(--border);
-      padding: 48px 48px 36px;
-    }
-
-    .header-eyebrow {
-      font-family: "DM Mono", monospace;
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--blue);
-      margin-bottom: 14px;
-    }
-
-    header h1 {
-      font-size: clamp(22px, 4vw, 38px);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-      margin-bottom: 10px;
-    }
-
-    header h1 em {
-      font-style: normal;
-      color: var(--blue);
-    }
-
-    .header-desc {
-      font-size: 13px;
-      color: var(--text2);
-      max-width: 640px;
-      margin-bottom: 20px;
-    }
-
-    .header-chips {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .chip {
-      font-family: "DM Mono", monospace;
-      font-size: 11px;
-      color: var(--text2);
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 4px 12px;
-    }
-
-    /* ===== MAIN ===== */
-    main {
-      max-width: 1080px;
-      padding: 48px 48px 96px;
-    }
-
-    /* ===== SECTION ===== */
-    .section {
-      margin-bottom: 56px;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: baseline;
-      gap: 14px;
-      margin-bottom: 20px;
-    }
-
-    .section-num {
-      font-family: "DM Mono", monospace;
-      font-size: 11px;
-      color: var(--text3);
-      letter-spacing: 0.1em;
-    }
-
-    .section-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-      letter-spacing: 0.05em;
-    }
-
-    .section-line {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    /* ===== CARD GRID ===== */
-    .card-grid {
-      display: grid;
-      gap: 12px;
-    }
-
-    .card-grid.cols-2 {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .card-grid.cols-3 {
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    @media (max-width: 700px) {
-
-      .card-grid.cols-2,
-      .card-grid.cols-3 {
-        grid-template-columns: 1fr;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todoアプリ開発ハッカソン — 資料ポータル</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: sans-serif;
+        background: #fafaf8;
+        color: #1a1a1a;
+        min-height: 100vh;
+        padding: 48px 24px;
+      }
+      .container {
+        max-width: 680px;
+        margin: 0 auto;
       }
 
-      header,
-      main {
-        padding-left: 24px;
-        padding-right: 24px;
+      /* ===== HEADER ===== */
+      .header {
+        margin-bottom: 48px;
       }
-    }
-
-    /* ===== CARD ===== */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px 22px;
-      text-decoration: none;
-      color: inherit;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      transition:
-        border-color 0.15s,
-        box-shadow 0.15s,
-        transform 0.12s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: var(--accent-color, var(--border2));
-      transition: opacity 0.15s;
-    }
-
-    .card:hover {
-      border-color: var(--accent-color, var(--border2));
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
-      transform: translateY(-1px);
-    }
-
-    .card.blue {
-      --accent-color: var(--blue);
-    }
-
-    .card.teal {
-      --accent-color: var(--teal);
-    }
-
-    .card.amber {
-      --accent-color: var(--amber);
-    }
-
-    .card.coral {
-      --accent-color: var(--coral);
-    }
-
-    .card.purple {
-      --accent-color: var(--purple);
-    }
-
-    .card.green {
-      --accent-color: var(--green);
-    }
-
-    .card-badge {
-      font-family: "DM Mono", monospace;
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text3);
-      margin-bottom: 2px;
-    }
-
-    .card-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text);
-      line-height: 1.45;
-    }
-
-    .card-desc {
-      font-size: 12px;
-      color: var(--text2);
-      line-height: 1.7;
-    }
-
-    .card-arrow {
-      margin-top: auto;
-      padding-top: 12px;
-      font-family: "DM Mono", monospace;
-      font-size: 11px;
-      color: var(--text3);
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .card:hover .card-arrow {
-      color: var(--accent-color, var(--text2));
-    }
-
-    /* 仕様書カード（横並び小サイズ） */
-    .spec-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 10px;
-    }
-
-    .spec-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 16px;
-      text-decoration: none;
-      color: inherit;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      transition:
-        border-color 0.15s,
-        box-shadow 0.15s;
-    }
-
-    .spec-card:hover {
-      border-color: var(--border2);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-    }
-
-    .spec-num {
-      font-family: "DM Mono", monospace;
-      font-size: 11px;
-      color: var(--text3);
-      min-width: 28px;
-      padding-top: 1px;
-    }
-
-    .spec-badge {
-      display: inline-block;
-      font-family: "DM Mono", monospace;
-      font-size: 10px;
-      padding: 2px 7px;
-      border-radius: 4px;
-      margin-bottom: 4px;
-      font-weight: 500;
-    }
-
-    .spec-badge.must {
-      background: var(--coral-bg);
-      color: var(--coral);
-      border: 1px solid var(--coral-bd);
-    }
-
-    .spec-badge.opt {
-      background: var(--blue-bg);
-      color: var(--blue);
-      border: 1px solid var(--blue-bd);
-    }
-
-    .spec-badge.extra {
-      background: var(--surface2);
-      color: var(--text3);
-      border: 1px solid var(--border);
-    }
-
-    .spec-title {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text);
-      line-height: 1.5;
-    }
-
-    /* ===== AUDIENCE SPLIT ===== */
-    .audience-strip {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 56px;
-    }
-
-    @media (max-width: 600px) {
-      .audience-strip {
-        grid-template-columns: 1fr;
+      .header-label {
+        font-size: 0.75rem;
+        color: #aaa;
+        margin-bottom: 10px;
+        letter-spacing: 0.05em;
       }
-    }
+      .header h1 {
+        font-size: 1.65rem;
+        font-weight: 700;
+        line-height: 1.35;
+        margin-bottom: 6px;
+      }
+      .header-sub {
+        font-size: 0.88rem;
+        color: #888;
+      }
 
-    .audience-card {
-      border-radius: 12px;
-      padding: 24px;
-      border: 1px solid;
-    }
+      /* ===== SECTION ===== */
+      .section {
+        margin-bottom: 44px;
+      }
+      h2 {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      h2::before {
+        content: "";
+        display: inline-block;
+        width: 4px;
+        height: 1em;
+        background: #1a1a1a;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+      p {
+        font-size: 0.92rem;
+        line-height: 1.85;
+        margin-bottom: 12px;
+        color: #444;
+      }
 
-    .audience-card.trainee {
-      background: var(--blue-bg);
-      border-color: var(--blue-bd);
-    }
+      /* ===== TIMELINE ===== */
+      .tl {
+        padding-left: 16px;
+        border-left: 2px solid #e0e0e0;
+      }
+      .tl-row {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0ee;
+      }
+      .tl-row:last-child {
+        border-bottom: none;
+      }
+      .tl-time {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #888;
+        min-width: 48px;
+        padding-top: 1px;
+      }
+      .tl-body {
+        flex: 1;
+      }
+      .tl-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+      .tl-desc {
+        font-size: 0.82rem;
+        color: #777;
+        line-height: 1.6;
+      }
+      .tl-row-break .tl-title {
+        color: #bbb;
+        font-weight: 400;
+      }
 
-    .audience-card.tutor {
-      background: var(--coral-bg);
-      border-color: var(--coral-bd);
-    }
+      /* ===== LINK CARDS ===== */
+      .link-list {
+        display: grid;
+        gap: 8px;
+      }
+      .link-item {
+        display: grid;
+        grid-template-columns: 56px 1fr 24px;
+        border: 1px solid #ebebeb;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #fff;
+        text-decoration: none;
+        color: inherit;
+        transition:
+          border-color 0.12s,
+          box-shadow 0.12s;
+      }
+      .link-item:hover {
+        border-color: #bbb;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      }
+      .link-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #fff;
+        padding: 12px 8px;
+        text-align: center;
+        line-height: 1.4;
+        background: #1a1a1a;
+      }
+      .link-badge.gray {
+        background: #888;
+      }
+      .link-badge.light {
+        background: #bbb;
+      }
+      .link-body {
+        padding: 13px 16px;
+      }
+      .link-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+      .link-desc {
+        font-size: 0.8rem;
+        color: #777;
+        line-height: 1.6;
+      }
+      .link-arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ccc;
+        font-size: 1rem;
+        padding-right: 14px;
+      }
+      .link-item:hover .link-arrow {
+        color: #888;
+      }
 
-    .audience-label {
-      font-family: "DM Mono", monospace;
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
+      /* ===== SPEC GRID ===== */
+      .spec-section-label {
+        font-size: 0.75rem;
+        color: #aaa;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+        font-weight: 700;
+        margin-top: 16px;
+      }
+      .spec-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 7px;
+      }
+      .spec-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: #fff;
+        border: 1px solid #ebebeb;
+        border-radius: 8px;
+        padding: 11px 14px;
+        text-decoration: none;
+        color: inherit;
+        transition: border-color 0.12s;
+      }
+      .spec-item:hover {
+        border-color: #bbb;
+      }
+      .spec-num {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #bbb;
+        min-width: 20px;
+      }
+      .spec-body {
+        flex: 1;
+      }
+      .spec-badge {
+        display: inline-block;
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 1px 6px;
+        border-radius: 3px;
+        margin-bottom: 3px;
+        letter-spacing: 0.03em;
+      }
+      .spec-badge.must {
+        background: #1a1a1a;
+        color: #fff;
+      }
+      .spec-badge.opt {
+        background: #f0f0ee;
+        color: #555;
+        border: 1px solid #ddd;
+      }
+      .spec-badge.ext {
+        background: #fff;
+        color: #bbb;
+        border: 1px solid #e0e0e0;
+      }
+      .spec-title {
+        font-size: 0.83rem;
+        font-weight: 500;
+        line-height: 1.4;
+      }
+      .spec-arrow {
+        color: #ddd;
+        font-size: 0.9rem;
+      }
+      .spec-item:hover .spec-arrow {
+        color: #999;
+      }
 
-    .audience-card.trainee .audience-label {
-      color: var(--blue);
-    }
+      /* ===== INFO BOX ===== */
+      .info-box {
+        background: #fff;
+        border: 1px solid #ebebeb;
+        border-radius: 8px;
+        padding: 18px 22px;
+      }
+      .info-box p {
+        margin-bottom: 8px;
+      }
+      .info-box p:last-child {
+        margin-bottom: 0;
+      }
 
-    .audience-card.tutor .audience-label {
-      color: var(--coral);
-    }
+      /* ===== CHIP ROW ===== */
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .chip {
+        font-size: 0.75rem;
+        color: #888;
+        background: #fff;
+        border: 1px solid #e8e8e5;
+        border-radius: 999px;
+        padding: 3px 12px;
+      }
 
-    .audience-links {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+      /* ===== FOOTER ===== */
+      .footer {
+        font-size: 0.75rem;
+        color: #bbb;
+        text-align: center;
+        margin-top: 52px;
+        padding-top: 20px;
+        border-top: 1px solid #ebebeb;
+      }
 
-    .audience-link {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text);
-      transition:
-        box-shadow 0.12s,
-        transform 0.1s;
-    }
+      @media (max-width: 480px) {
+        .spec-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- HEADER -->
+      <div class="header">
+        <div class="header-label">研修生向け ／ 資料ポータル</div>
+        <h1>Todoアプリ開発ハッカソン</h1>
+        <div class="header-sub">新人研修 ／ 1日（約8時間）</div>
+        <div class="chips">
+          <span class="chip">対象：新入社員 約20名</span>
+          <span class="chip">5人 × 4チーム</span>
+          <span class="chip">題材：Todoアプリ改修</span>
+          <span class="chip">技術：Vue.js</span>
+        </div>
+      </div>
 
-    .audience-link:hover {
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-      transform: translateX(2px);
-    }
+      <!-- タイムライン -->
+      <div class="section">
+        <h2>今日の流れ</h2>
+        <div class="tl">
+          <div class="tl-row">
+            <div class="tl-time">10:00</div>
+            <div class="tl-body">
+              <div class="tl-title">① 全体説明</div>
+              <div class="tl-desc">
+                自己紹介・ハッカソンとは・ルール共有（30分）
+              </div>
+            </div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-time">10:30</div>
+            <div class="tl-body">
+              <div class="tl-title">② Git解説 / 課題共有・セットアップ</div>
+              <div class="tl-desc">
+                Git概念とコマンド解説（15分）+ 課題共有・環境構築（15分）
+              </div>
+            </div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-time">11:00</div>
+            <div class="tl-body">
+              <div class="tl-title">③ 実装スタート</div>
+              <div class="tl-desc">チームで課題に取り組む（1時間）</div>
+            </div>
+          </div>
+          <div class="tl-row tl-row-break">
+            <div class="tl-time">12:00</div>
+            <div class="tl-body">
+              <div class="tl-title">昼休憩（1時間）</div>
+            </div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-time">13:00</div>
+            <div class="tl-body">
+              <div class="tl-title">④ 実装継続</div>
+              <div class="tl-desc">
+                詰まった問題を解消しながら実装を進める（2時間）
+              </div>
+            </div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-time">15:00</div>
+            <div class="tl-body">
+              <div class="tl-title">⑤ クロスレビュー</div>
+              <div class="tl-desc">
+                他チームのコードを読んでフィードバックし合う（1時間）
+              </div>
+            </div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-time">16:00</div>
+            <div class="tl-body">
+              <div class="tl-title">⑥ チーム発表</div>
+              <div class="tl-desc">
+                今日の取り組みを各チームが発表する（1時間）
+              </div>
+            </div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-time">17:00</div>
+            <div class="tl-body">
+              <div class="tl-title">⑦ 全体総括・クロージング</div>
+              <div class="tl-desc">振り返りとまとめ（1時間）</div>
+            </div>
+          </div>
+          <div class="tl-row tl-row-break">
+            <div class="tl-time">18:00</div>
+            <div class="tl-body">
+              <div class="tl-title">終了</div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    .audience-link-sub {
-      font-size: 11px;
-      font-weight: 300;
-      color: var(--text3);
-      margin-left: auto;
-      font-family: "DM Mono", monospace;
-    }
+      <!-- 00 事前準備 -->
+      <div class="section">
+        <h2>00 事前準備</h2>
+        <div class="link-list">
+          <a class="link-item" href="00_事前準備/A_Node環境構築手順.html">
+            <div class="link-badge">Node</div>
+            <div class="link-body">
+              <div class="link-title">Node.js インストール手順書</div>
+              <div class="link-desc">
+                Windows 11 向け Node.js / npm の導入手順
+              </div>
+            </div>
+            <div class="link-arrow">›</div>
+          </a>
+          <a class="link-item" href="00_事前準備/B_Git環境構築.html">
+            <div class="link-badge gray">Git</div>
+            <div class="link-body">
+              <div class="link-title">
+                Git &amp; GitHub インストール・初期設定 手順書
+              </div>
+              <div class="link-desc">Git のインストールから SSH 連携まで</div>
+            </div>
+            <div class="link-arrow">›</div>
+          </a>
+        </div>
+      </div>
 
-    /* ===== DIVIDER ===== */
-    .divider {
-      height: 1px;
-      background: var(--border);
-      margin: 40px 0;
-    }
+      <!-- 01 全体の流れ -->
+      <div class="section">
+        <h2>01 全体の流れ</h2>
+        <div class="link-list">
+          <a class="link-item" href="01_全体の流れ/A_全体の流れ.html">
+            <div class="link-badge">01</div>
+            <div class="link-body">
+              <div class="link-title">今日の流れ・ルール・チーム構成</div>
+              <div class="link-desc">
+                タイムライン・課題概要・今日大切にしてほしいこと
+              </div>
+            </div>
+            <div class="link-arrow">›</div>
+          </a>
+        </div>
+      </div>
 
-    /* ===== TIMELINE MINI ===== */
-    .tl-mini {
-      display: grid;
-      grid-template-columns: 60px 1fr;
-      gap: 0;
-    }
+      <!-- 02 Git について -->
+      <div class="section">
+        <h2>02 Git について</h2>
+        <div class="link-list">
+          <a class="link-item" href="02_Gitについて/A_Git概念.html">
+            <div class="link-badge">概念</div>
+            <div class="link-body">
+              <div class="link-title">
+                Git とは — バージョン管理の基礎と実践ワークフロー
+              </div>
+              <div class="link-desc">ブランチ・コミット・マージの概念説明</div>
+            </div>
+            <div class="link-arrow">›</div>
+          </a>
+          <a class="link-item" href="02_Gitについて/B_Git基本操作.html">
+            <div class="link-badge gray">操作</div>
+            <div class="link-body">
+              <div class="link-title">Git の基本コマンド</div>
+              <div class="link-desc">
+                branch / push / pull / merge のコマンドリファレンス＋ハンズオン
+              </div>
+            </div>
+            <div class="link-arrow">›</div>
+          </a>
+        </div>
+      </div>
 
-    .tl-mini-row {
-      display: contents;
-    }
+      <!-- 03 課題セットアップ -->
+      <div class="section">
+        <h2>03 課題セットアップ</h2>
+        <div class="link-list">
+          <a class="link-item" href="03_課題セットアップ/A_今日のシナリオ.html">
+            <div class="link-badge">シナリオ</div>
+            <div class="link-body">
+              <div class="link-title">今日のシナリオ</div>
+              <div class="link-desc">
+                背景・クライアント依頼メール・AI使い方ルール
+              </div>
+            </div>
+            <div class="link-arrow">›</div>
+          </a>
+          <a
+            class="link-item"
+            href="03_課題セットアップ/B_プロンプトログの残し方.html"
+          >
+            <div class="link-badge gray">ログ</div>
+            <div class="link-body">
+              <div class="link-title">プロンプトログ管理ガイド</div>
+              <div class="link-desc">
+                AIとのやり取りの記録方法・テンプレート・記入サンプル
+              </div>
+            </div>
+            <div class="link-arrow">›</div>
+          </a>
+          <a
+            class="link-item"
+            href="03_課題セットアップ/C_Gitブランチのルール.html"
+          >
+            <div class="link-badge gray">Git</div>
+            <div class="link-body">
+              <div class="link-title">Git ブランチ命名規則</div>
+              <div class="link-desc">
+                feature/* / docs/* の構成とブランチ一覧
+              </div>
+            </div>
+            <div class="link-arrow">›</div>
+          </a>
+          <a
+            class="link-item"
+            href="03_課題セットアップ/D_リポジトリ取得手順.html"
+          >
+            <div class="link-badge gray">Clone</div>
+            <div class="link-body">
+              <div class="link-title">GitHub リポジトリ取得手順書</div>
+              <div class="link-desc">
+                clone → npm install → npm run dev まで
+              </div>
+            </div>
+            <div class="link-arrow">›</div>
+          </a>
+        </div>
 
-    .tl-mini-time {
-      font-family: "DM Mono", monospace;
-      font-size: 11px;
-      color: var(--text3);
-      padding: 8px 0;
-      border-right: 1px solid var(--border);
-      padding-right: 14px;
-      text-align: right;
-    }
+        <!-- 課題一覧 -->
+        <div class="spec-section-label">課題一覧 — 仕様書</div>
 
-    .tl-mini-body {
-      padding: 8px 0 8px 14px;
-      font-size: 12px;
-      color: var(--text2);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+        <a
+          class="link-item"
+          href="03_課題セットアップ/E_Todoアプリ機能仕様書/00_menu.html"
+          style="
+            margin-bottom: 10px;
+            text-decoration: none;
+            display: grid;
+            grid-template-columns: 56px 1fr 24px;
+            border: 1px solid #ebebeb;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+            color: inherit;
+            transition:
+              border-color 0.12s,
+              box-shadow 0.12s;
+          "
+        >
+          <div class="link-badge" style="background: #1a1a1a">一覧</div>
+          <div class="link-body">
+            <div class="link-title">ハッカソン 課題一覧メニュー</div>
+            <div class="link-desc">
+              ★1 必須 〜 ★3 エクストラの全課題へのハブ
+            </div>
+          </div>
+          <div class="link-arrow">›</div>
+        </a>
 
-    .tl-mini-row:last-child .tl-mini-body,
-    .tl-mini-row:last-child .tl-mini-time {
-      border-bottom: none;
-    }
+        <div class="spec-grid">
+          <a
+            class="spec-item"
+            href="03_課題セットアップ/E_Todoアプリ機能仕様書/01_delete.html"
+          >
+            <span class="spec-num">01</span>
+            <div class="spec-body">
+              <span class="spec-badge must">★1 必須</span>
+              <div class="spec-title">タスクの削除</div>
+            </div>
+            <span class="spec-arrow">›</span>
+          </a>
+          <a
+            class="spec-item"
+            href="03_課題セットアップ/E_Todoアプリ機能仕様書/02_complete.html"
+          >
+            <span class="spec-num">02</span>
+            <div class="spec-body">
+              <span class="spec-badge must">★1 必須</span>
+              <div class="spec-title">タスクの完了チェック</div>
+            </div>
+            <span class="spec-arrow">›</span>
+          </a>
+          <a
+            class="spec-item"
+            href="03_課題セットアップ/E_Todoアプリ機能仕様書/03_priority.html"
+          >
+            <span class="spec-num">03</span>
+            <div class="spec-body">
+              <span class="spec-badge must">★1 必須</span>
+              <div class="spec-title">優先度の設定と色分け表示</div>
+            </div>
+            <span class="spec-arrow">›</span>
+          </a>
+          <a
+            class="spec-item"
+            href="03_課題セットアップ/E_Todoアプリ機能仕様書/04_search.html"
+          >
+            <span class="spec-num">04</span>
+            <div class="spec-body">
+              <span class="spec-badge opt">★2 追加</span>
+              <div class="spec-title">タスクの検索（フィルタリング）</div>
+            </div>
+            <span class="spec-arrow">›</span>
+          </a>
+          <a
+            class="spec-item"
+            href="03_課題セットアップ/E_Todoアプリ機能仕様書/05_toggle.html"
+          >
+            <span class="spec-num">05</span>
+            <div class="spec-body">
+              <span class="spec-badge opt">★2 追加</span>
+              <div class="spec-title">完了済み非表示トグル＋件数表示</div>
+            </div>
+            <span class="spec-arrow">›</span>
+          </a>
+          <a
+            class="spec-item"
+            href="03_課題セットアップ/E_Todoアプリ機能仕様書/06_deadline.html"
+          >
+            <span class="spec-num">06</span>
+            <div class="spec-body">
+              <span class="spec-badge opt">★2 追加</span>
+              <div class="spec-title">期限設定と期限切れの警告表示</div>
+            </div>
+            <span class="spec-arrow">›</span>
+          </a>
+          <a
+            class="spec-item"
+            href="03_課題セットアップ/E_Todoアプリ機能仕様書/07_sort.html"
+          >
+            <span class="spec-num">07</span>
+            <div class="spec-body">
+              <span class="spec-badge opt">★2 追加</span>
+              <div class="spec-title">優先度＋期限での複合ソート</div>
+            </div>
+            <span class="spec-arrow">›</span>
+          </a>
+          <a
+            class="spec-item"
+            href="03_課題セットアップ/E_Todoアプリ機能仕様書/08_inline_edit.html"
+          >
+            <span class="spec-num">08</span>
+            <div class="spec-body">
+              <span class="spec-badge ext">★3 エクストラ</span>
+              <div class="spec-title">タスクのインライン編集</div>
+            </div>
+            <span class="spec-arrow">›</span>
+          </a>
+          <a
+            class="spec-item"
+            href="03_課題セットアップ/E_Todoアプリ機能仕様書/09_persist.html"
+          >
+            <span class="spec-num">09</span>
+            <div class="spec-body">
+              <span class="spec-badge ext">★3 エクストラ</span>
+              <div class="spec-title">データの永続化</div>
+            </div>
+            <span class="spec-arrow">›</span>
+          </a>
+          <a
+            class="spec-item"
+            href="03_課題セットアップ/E_Todoアプリ機能仕様書/10_dnd.html"
+          >
+            <span class="spec-num">10</span>
+            <div class="spec-body">
+              <span class="spec-badge ext">★3 エクストラ</span>
+              <div class="spec-title">タスクのドラッグ＆ドロップ並び替え</div>
+            </div>
+            <span class="spec-arrow">›</span>
+          </a>
+        </div>
+      </div>
 
-    .tl-tag {
-      font-family: "DM Mono", monospace;
-      font-size: 10px;
-      padding: 1px 7px;
-      border-radius: 4px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text3);
-      white-space: nowrap;
-    }
+      <!-- 04 クロスレビュー -->
+      <div class="section">
+        <h2>04 クロスレビュー</h2>
+        <div class="link-list">
+          <a
+            class="link-item"
+            href="04_クロスレビュー/A_クロスレビュー説明.html"
+          >
+            <div class="link-badge">15:00</div>
+            <div class="link-body">
+              <div class="link-title">クロスレビューの進め方・シート</div>
+              <div class="link-desc">
+                ペアレビューの手順・FBシート・60分の進め方
+              </div>
+            </div>
+            <div class="link-arrow">›</div>
+          </a>
+        </div>
+      </div>
 
-    /* ===== FOOTER ===== */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 20px 48px;
-      font-family: "DM Mono", monospace;
-      font-size: 11px;
-      color: var(--text3);
-      display: flex;
-      gap: 24px;
-    }
-  </style>
-</head>
+      <!-- 05 発表 -->
+      <div class="section">
+        <h2>05 発表</h2>
+        <div class="link-list">
+          <a class="link-item" href="05_発表/A_発表の進め方.html">
+            <div class="link-badge">16:00</div>
+            <div class="link-body">
+              <div class="link-title">発表の進め方・発表シート</div>
+              <div class="link-desc">
+                10分構成の説明・KPTの書き方・発表前チェックポイント
+              </div>
+            </div>
+            <div class="link-arrow">›</div>
+          </a>
+        </div>
+      </div>
 
-<body>
-  <header>
-    <div class="header-eyebrow">2026年度 新入社員研修 / 研修委員会</div>
-    <h1>Todoアプリ開発<br /><em>ハッカソン</em> 資料ポータル</h1>
-    <p class="header-desc">
-      研修当日に使う資料をすべてここから開けます。対象に応じたリンクからアクセスしてください。
-    </p>
-    <div class="header-chips">
-      <span class="chip">対象：新入社員 約20名</span>
-      <span class="chip">形式：5人 × 4チーム</span>
-      <span class="chip">期間：1日（8時間）</span>
-      <span class="chip">題材：Todoアプリ改修</span>
+      <div class="footer">
+        わからないことはまずチームで。それでも詰まったらチューターへ。
+      </div>
     </div>
-  </header>
-
-  <main>
-    <li>
-      <a class="" href="01_全体の流れ/01_A_全体の流れ.html">全体の流れ</a>
-    </li>
-    <li>
-      <a class="" href="02_Gitについて/02_A_Git概念.html">Git概念</a>
-    </li>
-    <li>
-      <a class="" href="02_Gitについて/02_B_Git基本操作.html">Git基本操作</a>
-    </li>
-    <li>
-      <a class="" href="03_課題セットアップ/03_A_課題リポジトリセットアップ.html">課題リポジトリセットアップ</a>
-    </li>
-    <li>
-      <a class="" href="03_課題セットアップ/03_B_今日のシナリオ.html">今日のシナリオ</a>
-    </li>
-    <li>
-      <a class="" href="03_課題セットアップ/03_C_Todoアプリ機能仕様書/00_menu.html">Todoアプリ機能仕様書</a>
-    </li>
-    <li>
-      <a class="" href="04_クロスレビュー/04_クロスレビュー説明.html">クロスレビュー</a>
-    </li>
-    <li>
-      <a class="" href="05_発表/05_発表の進め方.html">発表の進め方</a>
-    </li>
-
-    <p style="margin-bottom: 300px"></p>
-
-    <!-- ===== タイムライン ===== -->
-    <div class="section">
-      <div class="section-header">
-        <span class="section-num">SCHEDULE</span>
-        <span class="section-title">当日のタイムライン</span>
-        <div class="section-line"></div>
-      </div>
-
-      <div class="tl-mini">
-        <div class="tl-mini-row">
-          <div class="tl-mini-time">10:00</div>
-          <div class="tl-mini-body">
-            <span>① 全体説明・Gitレクチャー</span>
-            <span class="tl-tag">30min</span>
-          </div>
-        </div>
-        <div class="tl-mini-row">
-          <div class="tl-mini-time">10:30</div>
-          <div class="tl-mini-body">
-            <span>② 課題共有・環境セットアップ</span>
-            <span class="tl-tag">30min</span>
-          </div>
-        </div>
-        <div class="tl-mini-row">
-          <div class="tl-mini-time">11:00</div>
-          <div class="tl-mini-body">
-            <span>③ 実装フェーズ（午前）</span>
-            <span class="tl-tag">1h</span>
-          </div>
-        </div>
-        <div class="tl-mini-row">
-          <div class="tl-mini-time">12:00</div>
-          <div class="tl-mini-body" style="color: var(--text3)">
-            <span>昼休憩</span>
-            <span class="tl-tag">1h</span>
-          </div>
-        </div>
-        <div class="tl-mini-row">
-          <div class="tl-mini-time">13:00</div>
-          <div class="tl-mini-body">
-            <span>④ 実装継続 & Git問題解消</span>
-            <span class="tl-tag">2h</span>
-          </div>
-        </div>
-        <div class="tl-mini-row">
-          <div class="tl-mini-time">15:00</div>
-          <div class="tl-mini-body">
-            <span>⑤ クロスレビュー</span>
-            <span class="tl-tag">1h</span>
-          </div>
-        </div>
-        <div class="tl-mini-row">
-          <div class="tl-mini-time">16:00</div>
-          <div class="tl-mini-body">
-            <span>⑥ チーム発表</span>
-            <span class="tl-tag">1h</span>
-          </div>
-        </div>
-        <div class="tl-mini-row">
-          <div class="tl-mini-time">17:00</div>
-          <div class="tl-mini-body">
-            <span>⑦ 全体総括・クロージング</span>
-            <span class="tl-tag">1h</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ===== セクション1: 全体の流れ ===== -->
-    <div class="section">
-      <div class="section-header">
-        <span class="section-num">01</span>
-        <span class="section-title">全体の流れ</span>
-        <div class="section-line"></div>
-      </div>
-      <div class="card-grid cols-2">
-        <a class="card blue" href="01_全体の流れ/01_A_全体の流れ.html">
-          <div class="card-badge">01-A　研修生 + チューター共通</div>
-          <div class="card-title">今日の流れ・ルール・チーム構成</div>
-          <div class="card-desc">
-            タイムライン・課題の概要・今日大切にしてほしいことをまとめた当日配布資料。研修生はまずここから。
-          </div>
-          <div class="card-arrow">開く →</div>
-        </a>
-      </div>
-    </div>
-
-    <!-- ===== セクション2: Gitについて ===== -->
-    <div class="section">
-      <div class="section-header">
-        <span class="section-num">02</span>
-        <span class="section-title">Git について</span>
-        <div class="section-line"></div>
-      </div>
-      <div class="card-grid cols-2">
-        <a class="card teal" href="02_Gitについて/02_A_Git概念.html">
-          <div class="card-badge">02-A　Gitレクチャー資料</div>
-          <div class="card-title">
-            Git とは — バージョン管理の基礎と実践ワークフロー
-          </div>
-          <div class="card-desc">
-            ブランチ・コミット・マージ・コンフリクトを概念から説明するレクチャー用スライド。
-          </div>
-          <div class="card-arrow">開く →</div>
-        </a>
-        <a class="card teal" href="02_Gitについて/02_B_Git基本操作.html">
-          <div class="card-badge">02-B　コマンドリファレンス</div>
-          <div class="card-title">Git の基本コマンド</div>
-          <div class="card-desc">
-            実装中に困ったときに参照するコマンド逆引き。研修生が手元に置いておく用。
-          </div>
-          <div class="card-arrow">開く →</div>
-        </a>
-      </div>
-    </div>
-
-    <!-- ===== セクション3: 課題セットアップ ===== -->
-    <div class="section">
-      <div class="section-header">
-        <span class="section-num">03</span>
-        <span class="section-title">課題セットアップ</span>
-        <div class="section-line"></div>
-      </div>
-      <div class="card-grid cols-2" style="margin-bottom: 16px">
-        <a class="card amber" href="03_課題セットアップ/03_A_課題リポジトリセットアップ.html">
-          <div class="card-badge">03-A　環境構築手順</div>
-          <div class="card-title">Windows 11 向け Vue.js 環境構築手順書</div>
-          <div class="card-desc">
-            Node.js
-            のインストールからリポジトリのクローン・起動確認まで。セットアップタイムに開く。
-          </div>
-          <div class="card-arrow">開く →</div>
-        </a>
-        <a class="card amber" href="03_課題セットアップ/03_B_新人研修課題/00_menu.html">
-          <div class="card-badge">03-B　課題一覧メニュー</div>
-          <div class="card-title">ハッカソン 課題一覧</div>
-          <div class="card-desc">
-            ★1必須〜★3エクストラまで全課題へのリンクをまとめたハブ。実装中はここをブックマーク。
-          </div>
-          <div class="card-arrow">開く →</div>
-        </a>
-      </div>
-
-      <!-- 仕様書一覧 -->
-      <div style="margin-bottom: 10px">
-        <span style="
-              font-family: &quot;DM Mono&quot;, monospace;
-              font-size: 11px;
-              color: var(--text3);
-              letter-spacing: 0.1em;
-            ">SPECS — 個別仕様書</span>
-      </div>
-      <div class="spec-grid">
-        <a class="spec-card" href="03_課題セットアップ/03_B_新人研修課題/01_delete.html">
-          <span class="spec-num">01</span>
-          <div class="spec-info">
-            <span class="spec-badge must">★1 必須</span>
-            <div class="spec-title">タスクの削除</div>
-          </div>
-        </a>
-        <a class="spec-card" href="03_課題セットアップ/03_B_新人研修課題/02_complete.html">
-          <span class="spec-num">02</span>
-          <div class="spec-info">
-            <span class="spec-badge must">★1 必須</span>
-            <div class="spec-title">タスクの完了チェック</div>
-          </div>
-        </a>
-        <a class="spec-card" href="03_課題セットアップ/03_B_新人研修課題/03_priority.html">
-          <span class="spec-num">03</span>
-          <div class="spec-info">
-            <span class="spec-badge must">★1 必須</span>
-            <div class="spec-title">優先度の設定と色分け表示</div>
-          </div>
-        </a>
-        <a class="spec-card" href="03_課題セットアップ/03_B_新人研修課題/04_search.html">
-          <span class="spec-num">04</span>
-          <div class="spec-info">
-            <span class="spec-badge opt">★2 追加</span>
-            <div class="spec-title">タスクの検索（フィルタリング）</div>
-          </div>
-        </a>
-        <a class="spec-card" href="03_課題セットアップ/03_B_新人研修課題/05_toggle.html">
-          <span class="spec-num">05</span>
-          <div class="spec-info">
-            <span class="spec-badge opt">★2 追加</span>
-            <div class="spec-title">完了済み非表示トグル＋件数表示</div>
-          </div>
-        </a>
-        <a class="spec-card" href="03_課題セットアップ/03_B_新人研修課題/06_deadline.html">
-          <span class="spec-num">06</span>
-          <div class="spec-info">
-            <span class="spec-badge opt">★2 追加</span>
-            <div class="spec-title">期限設定と期限切れの警告表示</div>
-          </div>
-        </a>
-        <a class="spec-card" href="03_課題セットアップ/03_B_新人研修課題/07_sort.html">
-          <span class="spec-num">07</span>
-          <div class="spec-info">
-            <span class="spec-badge opt">★2 追加</span>
-            <div class="spec-title">優先度＋期限での複合ソート</div>
-          </div>
-        </a>
-        <a class="spec-card" href="03_課題セットアップ/03_B_新人研修課題/08_inline_edit.html">
-          <span class="spec-num">08</span>
-          <div class="spec-info">
-            <span class="spec-badge extra">★3 エクストラ</span>
-            <div class="spec-title">タスクのインライン編集</div>
-          </div>
-        </a>
-        <a class="spec-card" href="03_課題セットアップ/03_B_新人研修課題/09_persist.html">
-          <span class="spec-num">09</span>
-          <div class="spec-info">
-            <span class="spec-badge extra">★3 エクストラ</span>
-            <div class="spec-title">データの永続化</div>
-          </div>
-        </a>
-        <a class="spec-card" href="03_課題セットアップ/03_B_新人研修課題/10_dnd.html">
-          <span class="spec-num">10</span>
-          <div class="spec-info">
-            <span class="spec-badge extra">★3 エクストラ</span>
-            <div class="spec-title">タスクのドラッグ＆ドロップ並び替え</div>
-          </div>
-        </a>
-      </div>
-    </div>
-
-    <!-- ===== セクション4: クロスレビュー ===== -->
-    <div class="section">
-      <div class="section-header">
-        <span class="section-num">04</span>
-        <span class="section-title">クロスレビュー</span>
-        <div class="section-line"></div>
-      </div>
-      <div class="card-grid cols-2">
-        <a class="card purple" href="04_クロスレビュー/04_クロスレビュー説明.html">
-          <div class="card-badge">04　⑤ クロスレビューフェーズ</div>
-          <div class="card-title">クロスレビューの進め方・シート</div>
-          <div class="card-desc">
-            ペアレビューの手順・レビューシート・60分の使い方。15時になったらここを開く。
-          </div>
-          <div class="card-arrow">開く →</div>
-        </a>
-      </div>
-    </div>
-
-    <!-- ===== セクション5: 発表 ===== -->
-    <div class="section">
-      <div class="section-header">
-        <span class="section-num">05</span>
-        <span class="section-title">発表</span>
-        <div class="section-line"></div>
-      </div>
-      <div class="card-grid cols-2">
-        <a class="card green" href="05_発表/05_発表の進め方.html">
-          <div class="card-badge">05　⑥ チーム発表フェーズ</div>
-          <div class="card-title">発表の進め方・発表シート</div>
-          <div class="card-desc">
-            15分 ×
-            4チームの進行手順と発表シートテンプレート。16時になったらここを開く。
-          </div>
-          <div class="card-arrow">開く →</div>
-        </a>
-      </div>
-    </div>
-  </main>
-
-  <footer>
-    <span>2026年度 新人研修課題委員会</span>
-    <span>—</span>
-    <span>チューター向け非公開資料は赤枠のカードを参照</span>
-  </footer>
-</body>
-
+  </body>
 </html>
