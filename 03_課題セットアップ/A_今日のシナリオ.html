@@ -1,440 +1,388 @@
 <!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>今日のシナリオ — 背景と注意事項</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>今日のシナリオ — 背景と注意事項</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-    body {
-      font-family: sans-serif;
-      background: #fafaf8;
-      color: #1a1a1a;
-      min-height: 100vh;
-      padding: 48px 24px;
-    }
+      body {
+        font-family: sans-serif;
+        background: #fafaf8;
+        color: #1a1a1a;
+        min-height: 100vh;
+        padding: 48px 24px;
+      }
 
-    .container {
-      max-width: 680px;
-      margin: 0 auto;
-    }
+      .container {
+        max-width: 680px;
+        margin: 0 auto;
+      }
 
-    /* ===== HEADER ===== */
-    .header {
-      margin-bottom: 48px;
-    }
-    .header-label {
-      font-size: 0.75rem;
-      color: #aaa;
-      margin-bottom: 10px;
-      letter-spacing: 0.05em;
-    }
-    .header h1 {
-      font-size: 1.65rem;
-      font-weight: 700;
-      line-height: 1.35;
-      margin-bottom: 6px;
-    }
-    .header-sub {
-      font-size: 0.88rem;
-      color: #888;
-    }
+      /* ===== HEADER ===== */
+      .header {
+        margin-bottom: 48px;
+      }
+      .header-label {
+        font-size: 0.75rem;
+        color: #aaa;
+        margin-bottom: 10px;
+        letter-spacing: 0.05em;
+      }
+      .header h1 {
+        font-size: 1.65rem;
+        font-weight: 700;
+        line-height: 1.35;
+        margin-bottom: 6px;
+      }
+      .header-sub {
+        font-size: 0.88rem;
+        color: #888;
+      }
 
-    /* ===== SECTION ===== */
-    .section {
-      margin-bottom: 44px;
-    }
-    h2 {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    h2::before {
-      content: "";
-      display: inline-block;
-      width: 4px;
-      height: 1em;
-      background: #1a1a1a;
-      border-radius: 2px;
-      flex-shrink: 0;
-    }
-    p {
-      font-size: 0.92rem;
-      line-height: 1.85;
-      margin-bottom: 12px;
-      color: #444;
-    }
+      /* ===== SECTION ===== */
+      .section {
+        margin-bottom: 44px;
+      }
+      h2 {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      h2::before {
+        content: "";
+        display: inline-block;
+        width: 4px;
+        height: 1em;
+        background: #1a1a1a;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+      p {
+        font-size: 0.92rem;
+        line-height: 1.85;
+        margin-bottom: 12px;
+        color: #444;
+      }
 
-    /* ===== SCENARIO BOX ===== */
-    .scenario-box {
-      background: #fff;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 20px 24px;
-    }
-    .scenario-box p {
-      margin-bottom: 10px;
-    }
-    .scenario-box p:last-child {
-      margin-bottom: 0;
-    }
+      /* ===== SCENARIO BOX ===== */
+      .scenario-box {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 20px 24px;
+      }
+      .scenario-box p {
+        margin-bottom: 10px;
+      }
+      .scenario-box p:last-child {
+        margin-bottom: 0;
+      }
 
-    /* ===== EMAIL ===== */
-    .email-wrap {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      overflow: hidden;
-      font-size: 0.88rem;
-    }
-    .email-header {
-      background: #f4f4f4;
-      padding: 14px 18px;
-      border-bottom: 1px solid #e0e0e0;
-    }
-    .email-row {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 4px;
-      font-size: 0.82rem;
-    }
-    .email-row:last-child { margin-bottom: 0; }
-    .email-field {
-      color: #aaa;
-      min-width: 32px;
-      font-size: 0.78rem;
-      padding-top: 1px;
-    }
-    .email-value {
-      color: #444;
-    }
-    .email-subject {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: #1a1a1a;
-      margin-top: 8px;
-    }
-    .email-body {
-      background: #fff;
-      padding: 20px 18px;
-      color: #333;
-      line-height: 1.85;
-    }
-    .email-body p {
-      font-size: 0.88rem;
-      margin-bottom: 12px;
-      color: #333;
-    }
-    .email-body p:last-child { margin-bottom: 0; }
-    .email-body ul {
-      padding-left: 18px;
-      margin-bottom: 12px;
-    }
-    .email-body li {
-      font-size: 0.88rem;
-      margin-bottom: 6px;
-      line-height: 1.7;
-      color: #333;
-    }
-    .email-note {
-      font-size: 0.78rem;
-      color: #aaa;
-      margin-top: 16px;
-      padding-top: 12px;
-      border-top: 1px solid #f0f0ee;
-      font-style: italic;
-    }
+      /* ===== EMAIL ===== */
+      .email-wrap {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        overflow: hidden;
+        font-size: 0.88rem;
+      }
+      .email-header {
+        background: #f4f4f4;
+        padding: 14px 18px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+      .email-row {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 4px;
+        font-size: 0.82rem;
+      }
+      .email-row:last-child {
+        margin-bottom: 0;
+      }
+      .email-field {
+        color: #aaa;
+        min-width: 32px;
+        font-size: 0.78rem;
+        padding-top: 1px;
+      }
+      .email-value {
+        color: #444;
+      }
+      .email-subject {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-top: 8px;
+      }
+      .email-body {
+        background: #fff;
+        padding: 20px 18px;
+        color: #333;
+        line-height: 1.85;
+      }
+      .email-body p {
+        font-size: 0.88rem;
+        margin-bottom: 12px;
+        color: #333;
+      }
+      .email-body p:last-child {
+        margin-bottom: 0;
+      }
+      .email-body ul {
+        padding-left: 18px;
+        margin-bottom: 12px;
+      }
+      .email-body li {
+        font-size: 0.88rem;
+        margin-bottom: 6px;
+        line-height: 1.7;
+        color: #333;
+      }
+      .email-note {
+        font-size: 0.78rem;
+        color: #aaa;
+        margin-top: 16px;
+        padding-top: 12px;
+        border-top: 1px solid #f0f0ee;
+        font-style: italic;
+      }
 
-    /* ===== POINT BOX ===== */
-    .point-list {
-      display: grid;
-      gap: 10px;
-    }
-    .point-item {
-      background: #fff;
-      border: 1px solid #e8e8e8;
-      border-radius: 8px;
-      padding: 14px 18px;
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-    }
-    .point-icon {
-      font-size: 1rem;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-    .point-body {
-      flex: 1;
-    }
-    .point-title {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: #1a1a1a;
-      margin-bottom: 3px;
-    }
-    .point-desc {
-      font-size: 0.82rem;
-      color: #666;
-      line-height: 1.65;
-    }
+      /* ===== POINT BOX ===== */
+      .point-list {
+        display: grid;
+        gap: 10px;
+      }
+      .point-item {
+        background: #fff;
+        border: 1px solid #e8e8e8;
+        border-radius: 8px;
+        padding: 14px 18px;
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+      }
+      .point-icon {
+        font-size: 1rem;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .point-body {
+        flex: 1;
+      }
+      .point-title {
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 3px;
+      }
+      .point-desc {
+        font-size: 0.82rem;
+        color: #666;
+        line-height: 1.65;
+      }
 
-    /* ===== RULE BOX ===== */
-    .rule-list {
-      display: grid;
-      gap: 8px;
-    }
-    .rule-item {
-      display: grid;
-      grid-template-columns: 56px 1fr;
-      border: 1px solid #ebebeb;
-      border-radius: 8px;
-      overflow: hidden;
-      background: #fff;
-    }
-    .rule-badge {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.7rem;
-      font-weight: 700;
-      padding: 12px 8px;
-      text-align: center;
-      line-height: 1.4;
-    }
-    .rule-badge.ok {
-      background: #1a1a1a;
-      color: #fff;
-    }
-    .rule-badge.ng {
-      background: #f0f0ee;
-      color: #888;
-    }
-    .rule-body {
-      padding: 12px 16px;
-    }
-    .rule-title {
-      font-size: 0.88rem;
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-    .rule-desc {
-      font-size: 0.8rem;
-      color: #777;
-      line-height: 1.6;
-    }
-    .rule-item.ng-item .rule-title {
-      color: #888;
-    }
-
-    /* ===== WARNING ===== */
-    .warn-box {
-      background: #fffbe6;
-      border: 1px solid #f0e08a;
-      border-radius: 8px;
-      padding: 16px 20px;
-    }
-    .warn-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: #a07800;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .warn-box p {
-      font-size: 0.88rem;
-      color: #5a4400;
-      margin-bottom: 0;
-    }
-
-    /* ===== FOOTER ===== */
-    .footer {
-      font-size: 0.75rem;
-      color: #bbb;
-      text-align: center;
-      margin-top: 52px;
-      padding-top: 20px;
-      border-top: 1px solid #ebebeb;
-    }
-    .back-to-top {
-    position: fixed;
-    top: 14px;
-    left: 16px;
-    font-size: 0.75rem;
-    color: #888;
-    text-decoration: none;
-    background: #fafaf8;
-    border: 1px solid #ebebeb;
-    padding: 5px 11px;
-    border-radius: 4px;
-    z-index: 100;
-  }
-  .back-to-top:hover {
-    color: #1a1a1a;
-    border-color: #bbb;
-  }
-</style>
-</head>
-<body>
-<a href="../index.html" class="back-to-top">&larr; Top</a>
-
-<div class="container">
-
-  <div class="header">
-    <div class="header-label">研修生向け ／ 当日配布</div>
-    <h1>今日のシナリオ</h1>
-    <div class="header-sub">背景・クライアント依頼・AIの使い方ルール</div>
-  </div>
-
-  <!-- ===== 設定 ===== -->
-  <div class="section">
-    <h2>今日の設定</h2>
-    <div class="scenario-box">
-      <p>あなたたちは、受託開発会社 <strong>株式会社テックブリッジ</strong> の新人開発チームです。</p>
-      <p>先輩社員は全員別案件で手が離せず、クライアントからの依頼対応は<strong>今日のチームだけ</strong>で進める必要があります。</p>
-      <p>先ほど、担当クライアントである <strong>ABC 株式会社</strong> の田中さんから依頼メールが届きました。既存の社内 Todo アプリに機能を追加してほしいとのことです。</p>
-    </div>
-  </div>
-
-  <!-- ===== クライアントメール ===== -->
-  <div class="section">
-    <h2>クライアントからの依頼メール</h2>
-
-    <div class="email-wrap">
-      <div class="email-header">
-        <div class="email-row">
-          <span class="email-field">From</span>
-          <span class="email-value">田中 誠一 &lt;tanaka@abc-corp.example&gt;</span>
-        </div>
-        <div class="email-row">
-          <span class="email-field">To</span>
-          <span class="email-value">開発担当者様 &lt;dev@techbridge.example&gt;</span>
-        </div>
-        <div class="email-row">
-          <span class="email-field">Date</span>
-          <span class="email-value">2026年5月XX日（月）09:14</span>
-        </div>
-        <div class="email-subject">【依頼】社内Todoアプリの機能追加について</div>
+      /* ===== FOOTER ===== */
+      .footer {
+        font-size: 0.75rem;
+        color: #bbb;
+        text-align: center;
+        margin-top: 52px;
+        padding-top: 20px;
+        border-top: 1px solid #ebebeb;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="header-label">研修生向け ／ 当日配布</div>
+        <h1>今日のシナリオ</h1>
+        <div class="header-sub">背景・クライアント依頼</div>
       </div>
 
-      <div class="email-body">
-        <p>お世話になっております、ABC株式会社の田中です。</p>
+      <!-- ===== 設定 ===== -->
+      <div class="section">
+        <h2>今日の設定</h2>
+        <div class="scenario-box">
+          <p>
+            あなたたちは、受託開発会社
+            <strong>株式会社テックブリッジ</strong> の新人開発チームです。
+          </p>
+          <p>
+            先輩社員は全員別案件で手が離せず、クライアントからの依頼対応は<strong>今日のチームだけ</strong>で進める必要があります。
+          </p>
+          <p>
+            先ほど、担当クライアントである
+            <strong>ABC 株式会社</strong>
+            の田中さんから依頼メールが届きました。既存の社内 Todo
+            アプリに機能を追加してほしいとのことです。
+          </p>
+        </div>
+      </div>
 
-        <p>先日ご納品いただいた社内 Todo アプリですが、現場からいくつか「もっとこうしてほしい」という声が上がっており、追加開発をお願いしたく連絡しました。</p>
+      <!-- ===== クライアントメール ===== -->
+      <div class="section">
+        <h2>クライアントからの依頼メール</h2>
 
-        <p>要望をざっくりまとめると以下の通りです。よしなにお願いします。</p>
+        <div class="email-wrap">
+          <div class="email-header">
+            <div class="email-row">
+              <span class="email-field">From</span>
+              <span class="email-value"
+                >田中 誠一 &lt;tanaka@abc-corp.example&gt;</span
+              >
+            </div>
+            <div class="email-row">
+              <span class="email-field">To</span>
+              <span class="email-value"
+                >開発担当者様 &lt;dev@techbridge.example&gt;</span
+              >
+            </div>
+            <div class="email-row">
+              <span class="email-field">Date</span>
+              <span class="email-value">2026年5月XX日（月）09:14</span>
+            </div>
+            <div class="email-subject">
+              【依頼】社内Todoアプリの機能追加について
+            </div>
+          </div>
 
-        <ul>
-          <li>タスクを<strong>消せるようにしてほしい</strong>。間違えて入力したものとかもあるので。ただ<strong>消したあとも元に戻せると安心</strong>です。即時に反映されればOKです。</li>
-          <li>終わったタスクに<strong>チェックをつけて、見た目を変えてほしい</strong>。わかりやすく。グレーっぽくしてもいいし、線を引いてもいい。まあお任せします。</li>
-          <li>重要なタスクがひと目でわかるよう、<strong>優先度をつけて色分けしてほしい</strong>。色はそれっぽければ何でもいいです。</li>
-          <li>あと全体的に<strong>使いやすくしてください</strong>。今のは少し見づらいので。</li>
-        </ul>
+          <div class="email-body">
+            <p>お世話になっております、ABC株式会社の田中です。</p>
 
-        <p>納期は今週中でお願いできますか？細かい仕様は御社でいい感じに決めてもらえると助かります。うちは技術的なことはよくわからないので。</p>
+            <p>
+              先日ご納品いただいた社内 Todo
+              アプリですが、現場からいくつか「もっとこうしてほしい」という声が上がっており、追加開発をお願いしたく連絡しました。
+            </p>
 
-        <p>よろしくお願いいたします。</p>
+            <p>
+              要望をざっくりまとめると以下の通りです。詳細な仕様については、別途お渡しする仕様書をご確認ください。
+            </p>
 
-        <p style="color:#888; margin-top:8px;">
-          ——<br />
-          田中 誠一｜ABC株式会社 総務部<br />
-          TEL: 03-XXXX-XXXX
+            <ul>
+              <li>
+                タスクを<strong>削除できるようにしてほしい</strong>。間違えて入力したものがあるので。
+              </li>
+              <li>
+                終わったタスクに<strong>チェックをつけて、見た目を変えてほしい</strong>。
+              </li>
+              <li>
+                重要なタスクがひと目でわかるよう、<strong>優先度をつけて色分けしてほしい</strong>。
+              </li>
+              <li>
+                全体的に<strong>使いやすくしてください</strong>。今のは少し見づらいので。
+              </li>
+            </ul>
+
+            <p>
+              納期は今週中でお願いできますか？細かい仕様は仕様書をご参照のうえ、いい感じに進めていただけると助かります。うちは技術的なことはよくわからないので。
+            </p>
+
+            <p>よろしくお願いいたします。</p>
+
+            <p style="color: #888; margin-top: 8px">
+              ——<br />
+              田中 誠一｜ABC株式会社 総務部<br />
+              TEL: 03-XXXX-XXXX
+            </p>
+
+            <div class="email-note">
+              ※
+              このメールはフィクションです。今日の研修用に作成したシナリオです。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== エンドユーザー情報 ===== -->
+      <div class="section">
+        <h2>このアプリを使っている人たち</h2>
+        <div class="point-list">
+          <div class="point-item">
+            <div class="point-icon">👤</div>
+            <div class="point-body">
+              <div class="point-title">田中 誠一（総務部・40代）</div>
+              <div class="point-desc">
+                依頼メールを送ってきた担当者。PCは毎日使うが、技術的なことはよくわからない。「いい感じにしてほしい」「よしなにお願いします」が口癖。要望は現場の声をそのまま転記していることが多い。
+              </div>
+            </div>
+          </div>
+
+          <div class="point-item">
+            <div class="point-icon">👥</div>
+            <div class="point-body">
+              <div class="point-title">総務部のメンバー（10名程度）</div>
+              <div class="point-desc">
+                実際にアプリを日常的に使う人たち。タスクの登録・確認が主な用途。「なんか使いづらい」とは言うが、具体的に何が問題かは言語化されていない。スマホよりPCで使うことが多い。
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 今日大事にしてほしいこと ===== -->
+      <div class="section">
+        <h2>今日大事にしてほしいこと</h2>
+        <p>
+          今日の研修は、<strong>実装した機能の数を評価しません</strong>。チームでどう判断して、どのように意思決定をしたか——その<strong>深さ</strong>を大事にしています。
         </p>
+        <div class="point-list">
+          <div class="point-item">
+            <div class="point-icon">💬</div>
+            <div class="point-body">
+              <div class="point-title">手を動かす前に、解釈をそろえる</div>
+              <div class="point-desc">
+                「いい感じに進めてください」は仕様ではありません。メールと仕様書の言葉をチームで読み解き、解釈を合わせてから実装に入ってください。
+              </div>
+            </div>
+          </div>
 
-        <div class="email-note">
-          ※ このメールはフィクションです。今日の研修用に作成したシナリオです。
+          <div class="point-item">
+            <div class="point-icon">📝</div>
+            <div class="point-body">
+              <div class="point-title">判断の理由を記録に残す</div>
+              <div class="point-desc">
+                AIを使うときも、チームで決めるときも、その判断の理由を一言でいいので書き留めておいてください。動いているかより、説明できるかが大事です。
+              </div>
+            </div>
+          </div>
+
+          <div class="point-item">
+            <div class="point-icon">🤖</div>
+            <div class="point-body">
+              <div class="point-title">
+                AIは使っていい。ただし、判断はチームで
+              </div>
+              <div class="point-desc">
+                実装のヒントや壁打ち相手として使うのはOK。ただし「AIがそう言ったから」は理由になりません。最終的な判断と責任は自分たちにあります。
+              </div>
+            </div>
+          </div>
+
+          <div class="point-item">
+            <div class="point-icon">🎯</div>
+            <div class="point-body">
+              <div class="point-title">数より深さ</div>
+              <div class="point-desc">
+                1つしか実装できなくても、なぜその機能を選び、どう設計し、どう判断したかが語れれば十分です。10個こなして何も説明できないより、1個を深く考えた方が価値があります。
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div class="footer">
+        わからないことはまずチームで。それでも詰まったらチューターへ。
       </div>
     </div>
-  </div>
-
-  <!-- ===== 読み解きポイント ===== -->
-  <div class="section">
-    <h2>メールを読んで気づいてほしいこと</h2>
-    <div class="point-list">
-      <div class="point-item">
-        <div class="point-icon">🤔</div>
-        <div class="point-body">
-          <div class="point-title">「消せる」かつ「元に戻せる」は両立するか？</div>
-          <div class="point-desc">即時削除と復元、どちらかを選ぶのか両方実現するのか。仕様書には書かれていません。チームで判断してください。</div>
-        </div>
-      </div>
-      <div class="point-item">
-        <div class="point-icon">🤔</div>
-        <div class="point-body">
-          <div class="point-title">「グレーっぽくしてもいいし、線を引いてもいい」どっち？</div>
-          <div class="point-desc">どちらか一方か、両方か。「お任せします」とあるが、チームとして根拠を持って決める必要があります。</div>
-        </div>
-      </div>
-      <div class="point-item">
-        <div class="point-icon">🤔</div>
-        <div class="point-body">
-          <div class="point-title">「使いやすくしてください」は要件か？</div>
-          <div class="point-desc">これは何をすれば達成されたことになるのか。測れない要件はどう扱うべきか考えてみてください。</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== AIの使い方 ===== -->
-  <div class="section">
-    <h2>AIの使い方ルール</h2>
-    <div class="rule-list">
-      <div class="rule-item">
-        <div class="rule-badge ok">OK</div>
-        <div class="rule-body">
-          <div class="rule-title">AIで実装のヒントを得る</div>
-          <div class="rule-desc">「Vue.js でこういう動きを実装するにはどうするか」のように、自分の方針を持ったうえで使う。</div>
-        </div>
-      </div>
-      <div class="rule-item">
-        <div class="rule-badge ok">OK</div>
-        <div class="rule-body">
-          <div class="rule-title">AIで仕様の解釈を整理する</div>
-          <div class="rule-desc">曖昧な要件の解釈を AI と壁打ちして考える。ただし最終判断はチームで行うこと。</div>
-        </div>
-      </div>
-      <div class="rule-item">
-        <div class="rule-badge ok">OK</div>
-        <div class="rule-body">
-          <div class="rule-title">AIのコードを使う（読んだあとで）</div>
-          <div class="rule-desc">AI が生成したコードは、自分で読んで説明できる状態にしてからコミットする。</div>
-        </div>
-      </div>
-      <div class="rule-item ng-item">
-        <div class="rule-badge ng">NG</div>
-        <div class="rule-body">
-          <div class="rule-title">「全部作って」丸投げ</div>
-          <div class="rule-desc">考える前に AI に丸投げするのは NG。プロンプトログに「なぜそう聞いたか」が残らない使い方は評価できません。</div>
-        </div>
-      </div>
-      <div class="rule-item ng-item">
-        <div class="rule-badge ng">NG</div>
-        <div class="rule-body">
-          <div class="rule-title">AI の回答を確認せずにコミット</div>
-          <div class="rule-desc">「動いてるからOK」は NG。動いていても正しいとは限りません。読んで、説明できて、はじめてコミット。</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== プロンプトログ ===== -->
-  <div class="section">
-    <h2>プロンプトログの残し方</h2>
-    <div class="warn-box">
-      <div class="warn-label">提出物として必要です</div>
-      <p>AI に投げたプロンプトと、その回答・判断の記録を <code>prompt_log.md</code> にまとめてコミットしてください。「何を聞いたか」だけでなく、「その回答をどう判断したか」を一行でいいので添えること。クロスレビューで使います。</p>
-    </div>
-  </div>
-
-  <div class="footer">
-    わからないことはまずチームで。それでも詰まったらチューターへ。
-  </div>
-
-</div>
-</body>
+  </body>
 </html>
