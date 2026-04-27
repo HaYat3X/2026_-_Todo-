@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>4. チーム体制設計 — Todoアプリ開発ハッカソン</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: sans-serif;
+        background: #fafaf8;
+        color: #1a1a1a;
+        min-height: 100vh;
+        padding: 48px 24px;
+      }
+      .container {
+        max-width: 680px;
+        margin: 0 auto;
+      }
+
+      /* ===== HEADER ===== */
+      .header {
+        margin-bottom: 48px;
+      }
+      .header-label {
+        font-size: 0.75rem;
+        color: #aaa;
+        margin-bottom: 10px;
+        letter-spacing: 0.05em;
+      }
+      .header h1 {
+        font-size: 1.65rem;
+        font-weight: 700;
+        line-height: 1.35;
+        margin-bottom: 6px;
+      }
+
+      /* ===== SECTION ===== */
+      .section {
+        margin-bottom: 44px;
+      }
+      h2 {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      h2::before {
+        content: "";
+        display: inline-block;
+        width: 4px;
+        height: 1em;
+        background: #1a1a1a;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+      p {
+        font-size: 0.92rem;
+        line-height: 1.85;
+        margin-bottom: 12px;
+        color: #444;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .chip {
+        font-size: 0.75rem;
+        color: #888;
+        background: #fff;
+        border: 1px solid #e8e8e5;
+        border-radius: 999px;
+        padding: 3px 12px;
+      }
+
+      code {
+        font-family: "Consolas", "Cascadia Code", monospace;
+        font-size: 0.82rem;
+        background: #f0f0ee;
+        padding: 1px 5px;
+        border-radius: 3px;
+        color: #1a1a1a;
+      }
+
+      /* ===== TIMELINE ===== */
+      .tl {
+        padding-left: 16px;
+        border-left: 2px solid #e0e0e0;
+      }
+      .tl-row {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0ee;
+      }
+      .tl-row:last-child {
+        border-bottom: none;
+      }
+      .tl-time {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #fff;
+        background: #1a1a1a;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .tl-body {
+        flex: 1;
+        padding-top: 2px;
+      }
+      .tl-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      .tl-desc {
+        font-size: 0.85rem;
+        color: #666;
+        line-height: 1.6;
+      }
+      .tl-note {
+        font-size: 0.8rem;
+        color: #d32f2f;
+        margin-top: 4px;
+        font-weight: 600;
+      }
+
+      /* ===== INFO BOX ===== */
+      .info-box {
+        background: #fff;
+        border: 1px solid #ebebeb;
+        border-radius: 8px;
+        padding: 18px 22px;
+        margin-bottom: 16px;
+      }
+      .info-box p {
+        margin-bottom: 8px;
+      }
+      .info-box p:last-child {
+        margin-bottom: 0;
+      }
+
+      /* ===== TABLE ===== */
+      .table-wrap {
+        width: 100%;
+        overflow-x: auto;
+        margin-bottom: 16px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+      }
+      th {
+        background: #f4f4f2;
+        text-align: left;
+        padding: 9px 13px;
+        border: 1px solid #e8e8e5;
+        font-weight: 600;
+        font-size: 0.8rem;
+        color: #555;
+      }
+      td {
+        padding: 9px 13px;
+        border: 1px solid #e8e8e5;
+        vertical-align: top;
+        line-height: 1.65;
+        color: #333;
+      }
+      /* compact (rotation table) */
+      .table-wrap.compact th,
+      .table-wrap.compact td {
+        text-align: center;
+        padding: 8px 13px;
+      }
+      .table-wrap.compact th:first-child,
+      .table-wrap.compact td:first-child {
+        text-align: left;
+        font-weight: 600;
+        background: #f4f4f2;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="header-label">Todoアプリ開発ハッカソン</div>
+        <h1>4. チーム体制設計</h1>
+        <div class="chips">
+          <span class="chip">Todoアプリ開発ハッカソン</span>
+          <span class="chip">当日運用</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>PC1台制</h2>
+        <div class="info-box">
+          <p><strong>チームでPC1台を囲んで進める。</strong></p>
+          <p>仕様の壁打ち・実装・ログ記録、すべて1画面を全員で見ながら行う。</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>役割構成</h2>
+        <p>4名チームの場合は ④⑤ を兼任。</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 25%">役割</th>
+                <th style="width: 15%">人数</th>
+                <th>やること</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>① ファシリテーター</strong></td>
+                <td>1名</td>
+                <td>仕様を読んで壁打ちをリード。方針を決める</td>
+              </tr>
+              <tr>
+                <td><strong>② 書記（方針）</strong></td>
+                <td>1名</td>
+                <td>壁打ちの結論を作業方針ログにまとめる</td>
+              </tr>
+              <tr>
+                <td><strong>③ 実装</strong></td>
+                <td>1名</td>
+                <td>まとめた方針を見ながらPCでコードを書く</td>
+              </tr>
+              <tr>
+                <td><strong>④ 取りまとめ</strong></td>
+                <td>1名</td>
+                <td>実装結果を確認・整理する</td>
+              </tr>
+              <tr>
+                <td><strong>⑤ 報告</strong></td>
+                <td>1名</td>
+                <td>方針ログ＋実績ログを持って講師に報告する</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>1機能あたりの進行フロー</h2>
+        <div class="tl">
+          <div class="tl-row">
+            <div class="tl-time">1</div>
+            <div class="tl-body">
+              <div class="tl-title">壁打ち（全員）</div>
+              <div class="tl-desc">
+                ファシリテーターが仕様を読み上げ、チームで実装方針を議論する
+              </div>
+            </div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-time">2</div>
+            <div class="tl-body">
+              <div class="tl-title">方針まとめ（書記）</div>
+              <div class="tl-desc">決まった方針を作業方針ログに記録する</div>
+              <div class="tl-note">※ これが完成したら実装に進んでよい</div>
+            </div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-time">3</div>
+            <div class="tl-body">
+              <div class="tl-title">実装（実装係）</div>
+              <div class="tl-desc">
+                作業方針ログを見ながらPCでコードを書く／AIを使ってよい
+              </div>
+            </div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-time">4</div>
+            <div class="tl-body">
+              <div class="tl-title">取りまとめ（取りまとめ係）</div>
+              <div class="tl-desc">
+                実装結果を確認し、作業実績ログに記録する
+              </div>
+            </div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-time">5</div>
+            <div class="tl-body">
+              <div class="tl-title">報告（報告係）</div>
+              <div class="tl-desc">
+                方針ログ＋実績ログを持って講師に報告する
+              </div>
+              <div class="tl-note">※ 2つのログが揃っていることが報告の条件</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>ローテーションルール</h2>
+        <p>
+          機能ごとに役割をローテする。<strong>全員が全役割を最低1回経験すること</strong>を目標とする。
+        </p>
+
+        <div class="info-box">
+          <p style="font-weight: 700; margin-bottom: 12px">例：★1の3機能</p>
+          <div class="table-wrap compact" style="margin-bottom: 0">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 25%"></th>
+                  <th style="width: 25%">削除</th>
+                  <th style="width: 25%">完了チェック</th>
+                  <th style="width: 25%">優先度設定</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Aさん</td>
+                  <td>①</td>
+                  <td>③</td>
+                  <td>⑤</td>
+                </tr>
+                <tr>
+                  <td>Bさん</td>
+                  <td>②</td>
+                  <td>④</td>
+                  <td>①</td>
+                </tr>
+                <tr>
+                  <td>Cさん</td>
+                  <td>③</td>
+                  <td>⑤</td>
+                  <td>②</td>
+                </tr>
+                <tr>
+                  <td>Dさん</td>
+                  <td>④</td>
+                  <td>①</td>
+                  <td>③</td>
+                </tr>
+                <tr>
+                  <td>Eさん</td>
+                  <td>⑤</td>
+                  <td>②</td>
+                  <td>④</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

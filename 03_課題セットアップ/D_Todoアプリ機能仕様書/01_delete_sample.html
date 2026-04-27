@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ハンズオン — タスクの削除</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: sans-serif;
+      background: #fafaf8;
+      color: #1a1a1a;
+      min-height: 100vh;
+      padding: 48px 24px;
+    }
+
+    .container { max-width: 680px; margin: 0 auto; }
+
+    /* ===== HEADER ===== */
+    .header { margin-bottom: 48px; }
+    .header-label { font-size: 0.75rem; color: #aaa; margin-bottom: 10px; letter-spacing: 0.05em; }
+    .header h1 { font-size: 1.65rem; font-weight: 700; line-height: 1.35; margin-bottom: 6px; }
+    .header-sub { font-size: 0.88rem; color: #888; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .chip { font-size: 0.75rem; color: #888; background: #fff; border: 1px solid #e8e8e5; border-radius: 999px; padding: 3px 12px; }
+
+    /* ===== SECTION ===== */
+    .section { margin-bottom: 44px; }
+
+    h2 {
+      font-size: 1rem; font-weight: 700; margin-bottom: 14px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    h2::before {
+      content: ""; display: inline-block;
+      width: 4px; height: 1em;
+      background: #1a1a1a; border-radius: 2px; flex-shrink: 0;
+    }
+
+    h3 { font-size: 0.88rem; font-weight: 700; margin: 20px 0 8px; color: #1a1a1a; }
+
+    p { font-size: 0.92rem; line-height: 1.85; margin-bottom: 12px; color: #444; }
+    strong { color: #1a1a1a; }
+
+    /* ===== STEP LIST ===== */
+    .step-list {
+      display: grid; gap: 1px;
+      background: #ebebeb; border: 1px solid #ebebeb;
+      border-radius: 8px; overflow: hidden; margin-bottom: 16px;
+    }
+    .step-item { display: grid; grid-template-columns: 48px 1fr; background: #fff; }
+    .step-num {
+      display: flex; align-items: flex-start; justify-content: center;
+      padding-top: 16px; background: #1a1a1a; color: #fff;
+    }
+    .step-num span {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700;
+    }
+    .step-body { padding: 16px 18px; }
+    .step-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; color: #1a1a1a; }
+    .step-desc { font-size: 0.85rem; color: #666; line-height: 1.7; margin: 0; }
+
+    /* ===== INFO BOX ===== */
+    .info-box {
+      background: #fff; border: 1px solid #ebebeb;
+      border-radius: 8px; padding: 18px 22px; margin-bottom: 16px;
+    }
+    .info-box p { font-size: 0.88rem; margin-bottom: 8px; }
+    .info-box p:last-child { margin-bottom: 0; }
+
+    /* ===== TABLE ===== */
+    .table-wrap { width: 100%; overflow-x: auto; margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th {
+      background: #f4f4f2; text-align: left; padding: 9px 13px;
+      border: 1px solid #e8e8e5; font-weight: 600; font-size: 0.8rem; color: #555;
+    }
+    td { padding: 9px 13px; border: 1px solid #e8e8e5; vertical-align: top; line-height: 1.65; color: #333; }
+
+    /* ===== NOTE / WARN / SUCCESS BOX ===== */
+    .note-box {
+      background: #fffbe6; border: 1px solid #f0e08a;
+      border-radius: 8px; padding: 14px 18px; margin-bottom: 16px;
+    }
+    .note-box-label {
+      font-size: 0.72rem; font-weight: 700; color: #a07800;
+      margin-bottom: 5px; letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .note-box p { font-size: 0.85rem; color: #5a4400; margin-bottom: 0; line-height: 1.75; }
+
+    .decision-box {
+      background: #f0f4ff; border: 1px solid #c7d7f8;
+      border-left: 3px solid #3b6eea;
+      border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 16px;
+    }
+    .decision-box-label {
+      font-size: 0.72rem; font-weight: 700; color: #2a50b8;
+      margin-bottom: 5px; letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .decision-box p { font-size: 0.85rem; color: #1e3a8a; margin-bottom: 0; line-height: 1.75; }
+
+    .report-box {
+      background: #f0fdf4; border: 1px solid #bbf7d0;
+      border-radius: 8px; padding: 14px 18px; margin-bottom: 16px;
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+    .report-box-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+    .report-box-body {}
+    .report-box-label {
+      font-size: 0.72rem; font-weight: 700; color: #166534;
+      margin-bottom: 4px; letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .report-box p { font-size: 0.85rem; color: #14532d; margin-bottom: 0; line-height: 1.75; }
+
+    /* ===== CODE BLOCK ===== */
+    code {
+      font-family: "Consolas", "Cascadia Code", monospace;
+      font-size: 0.82rem; background: #f0f0ee;
+      padding: 1px 5px; border-radius: 3px; color: #1a1a1a;
+    }
+    .code-wrap { position: relative; margin: 10px 0 16px; }
+    pre {
+      margin: 0; background: #0f172a; color: #e5eefc;
+      border-radius: 8px; padding: 16px 18px;
+      overflow-x: auto; font-size: 0.82rem; line-height: 1.75;
+      border: 1px solid rgba(148,163,184,0.2);
+    }
+    pre code { background: transparent; padding: 0; color: inherit; font-size: inherit; }
+    .copy-btn {
+      position: absolute; top: 8px; right: 8px;
+      border: none; border-radius: 6px;
+      background: rgba(255,255,255,0.12); color: #fff;
+      padding: 5px 10px; font-size: 0.72rem; cursor: pointer;
+      font-family: sans-serif;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,0.22); }
+
+    /* comment highlight in dark code */
+    .cm { color: #64748b; }
+    .kw { color: #93c5fd; }
+    .str { color: #86efac; }
+    .fn  { color: #fde68a; }
+    .ty  { color: #f0abfc; }
+
+    /* ===== MD CODE (docs sample) ===== */
+    .md-wrap { position: relative; margin: 10px 0 16px; }
+    .md-label {
+      font-size: 0.72rem; font-weight: 700; color: #888;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .md-block {
+      background: #0f172a; color: #94a3b8;
+      border-radius: 8px; padding: 16px 18px;
+      overflow-x: auto; font-size: 0.82rem; line-height: 1.9;
+      border: 1px solid rgba(148,163,184,0.2);
+      font-family: "Consolas", "Cascadia Code", monospace;
+      white-space: pre;
+    }
+    .md-h  { color: #60a5fa; font-weight: 700; }
+    .md-b  { color: #f8fafc; }
+    .md-c  { color: #34d399; }
+    .md-li { color: #cbd5e1; }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      font-size: 0.75rem; color: #bbb;
+      text-align: center; margin-top: 52px;
+      padding-top: 20px; border-top: 1px solid #ebebeb;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-label">研修生向け ／ ハンズオン資料</div>
+    <h1>タスクの削除</h1>
+    <div class="header-sub">機能追加ハンズオン — 削除機能を例に、AIとの壁打ちから実装・記録までを体験する</div>
+    <div class="chips">
+      <span class="chip">★1 基本課題</span>
+      <span class="chip">Vue 3 / TypeScript</span>
+      <span class="chip">全チーム必須</span>
+    </div>
+  </div>
+
+  <!-- 進め方 -->
+  <div class="section">
+    <h2>この資料の使い方</h2>
+    <p>
+      この資料は「完成コードを写すだけ」の資料ではありません。<strong>どう考えて、なぜその実装にしたか</strong>を体験してもらうために、AIとのやり取りと意思決定の流れをそのまま見せています。
+    </p>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num"><span>1</span></div>
+        <div class="step-body">
+          <div class="step-title">仕様を確認する</div>
+          <p class="step-desc">仕様書を読み、チームで「何を作るか」の解釈をそろえる。</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num"><span>2</span></div>
+        <div class="step-body">
+          <div class="step-title">AIと壁打ちして実装方針を決める</div>
+          <p class="step-desc">AIに方針を出させ、比較・検討して「なぜそうするか」をチームで決める。</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num"><span>3</span></div>
+        <div class="step-body">
+          <div class="step-title">docs に方針ログを書く → チューターに報告</div>
+          <p class="step-desc">決めた方針を <code>docs/task-delete.md</code> にまとめてから実装に入る。<strong>報告の条件はdocsが揃っていること。</strong></p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num"><span>4</span></div>
+        <div class="step-body">
+          <div class="step-title">実装する</div>
+          <p class="step-desc">サンプルコードを参考に、実際にコードを書く。コピペではなく手を動かして理解する。</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num"><span>5</span></div>
+        <div class="step-body">
+          <div class="step-title">docs に実装メモを書く → チューターに報告</div>
+          <p class="step-desc">実装して気づいたことを <code>docs/task-delete.md</code> に追記する。<strong>方針ログ＋実装メモが揃ったら最終報告。</strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 1: 仕様確認 -->
+  <div class="section">
+    <h2>STEP 1 — 仕様を確認する</h2>
+    <p>まず仕様書の要件を読む。「何が求められているか」をチームて確認する。</p>
+    <div class="info-box">
+      <p><strong>要件（仕様書より）</strong></p>
+      <p>・各タスクに対して削除できること</p>
+      <p>・削除したタスクは一覧から消えること</p>
+      <p>・ページのリロードは不要</p>
+    </div>
+    <div class="note-box">
+      <div class="note-box-label">チームで確認すること</div>
+      <p>削除ボタンを押したら即座に消えてよいか？「本当に削除しますか？」の確認ダイアログは必要か？<br>— <strong>今回はシンプルにするため、確認ダイアログなし・即時削除</strong>で進める。</p>
+    </div>
+  </div>
+
+  <!-- STEP 2: 壁打ち -->
+  <div class="section">
+    <h2>STEP 2 — AIと壁打ちして方針を決める</h2>
+    <p>AIにいきなりコードを出させるのではなく、まず<strong>実装方針と複数案の比較</strong>を依頼する。以下はそのやり取りの記録。</p>
+
+    <h3>AIへのプロンプト例</h3>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+      <pre><code>ToDoアプリを作成しています。
+
+環境：Vue 3 / TypeScript / script setup
+
+現状
+- tasks という配列にタスクが格納されている
+- v-for でリスト表示している
+- 入力欄＋ボタンで配列にデータを追加している
+
+今やりたいこと
+- ユーザーが任意のタスクを削除できるようにしたい
+- 各タスクごとに削除できること
+- 削除したタスクは一覧から消えること
+- ページのリロードは不要
+
+お願いしたいこと
+- 削除機能の実装方針を複数案で比較してほしい
+- まだコードは出さず、方針整理と比較検討だけでよい
+- 不明な点は「確認事項」として挙げてほしい</code></pre>
+    </div>
+
+    <h3>AIが提案する主な方針（要約）</h3>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th style="width:10%">案</th>
+          <th style="width:30%">方法</th>
+          <th>メリット</th>
+          <th>デメリット</th>
+        </tr>
+        <tr>
+          <td><strong>A</strong></td>
+          <td>インデックス指定</td>
+          <td>実装が最も簡単</td>
+          <td>並び替えやフィルタを追加するとズレが起きる</td>
+        </tr>
+        <tr>
+          <td><strong>B</strong></td>
+          <td>一意なID指定</td>
+          <td>確実に対象を特定できる。拡張性が高い</td>
+          <td>登録時にIDを付与する処理が増える</td>
+        </tr>
+        <tr>
+          <td><strong>C</strong></td>
+          <td>オブジェクト参照</td>
+          <td>IDなしで特定できる</td>
+          <td><code>indexOf</code>で位置を探す手間がある</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="decision-box">
+      <div class="decision-box-label">チームの意思決定</div>
+      <p><strong>案B（一意なID指定）を採用する。</strong><br>
+      理由：今後フィルタリングやソートを追加したときにインデックスがズレる問題を避けたい。IDで管理すれば「どのタスクを消すか」が明確になり、コードの意図も読みやすい。実装の手間は少し増えるが許容できる。</p>
+    </div>
+
+    <h3>ID生成方法もチームで決める</h3>
+    <p>案Bを採用するには、タスクに一意なIDを付ける必要がある。AIに聞くと主に3案が出てくる。</p>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th style="width:30%">方法</th>
+          <th>特徴</th>
+        </tr>
+        <tr>
+          <td><code>Date.now()</code></td>
+          <td>現在時刻のミリ秒。手入力での連打はほぼ起きないので実用上問題なし。シンプル。</td>
+        </tr>
+        <tr>
+          <td><code>crypto.randomUUID()</code></td>
+          <td>ブラウザ標準のUUID生成。重複確率がほぼゼロ。モダンな書き方。</td>
+        </tr>
+        <tr>
+          <td>インクリメント連番</td>
+          <td>わかりやすいが、削除後の「次の番号」管理が煩雑になる。</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="decision-box">
+      <div class="decision-box-label">チームの意思決定</div>
+      <p><strong><code>Date.now()</code> を採用する。</strong><br>
+      理由：手入力での追加なので同一ミリ秒での連打はほぼ起きない。コードが最もシンプルになる。今回の目的（削除機能の実装体験）に対して十分な精度がある。</p>
+    </div>
+  </div>
+
+  <!-- STEP 3: docs 方針ログ -->
+  <div class="section">
+    <h2>STEP 3 — docs に方針ログを書く</h2>
+    <p>実装に入る前に、決めた方針を <code>docs/task-delete.md</code> にまとめる。<strong>これが報告の条件。</strong></p>
+
+    <div class="report-box">
+      <div class="report-box-icon">📋</div>
+      <div class="report-box-body">
+        <div class="report-box-label">ここでチューターに報告</div>
+        <p>方針ログが書けたら、ファイルを持ってチューターに報告する。「なぜその方針にしたか」が説明できればOK。</p>
+      </div>
+    </div>
+
+    <h3>docs/task-delete.md — 方針ログのサンプル</h3>
+    <p>以下をそのままコピーして使ってよい。<strong>「チームの判断」欄は自分たちの言葉で書き直すこと。</strong></p>
+
+    <div class="md-wrap">
+      <div class="md-label">docs/task-delete.md</div>
+      <div class="md-block"><span class="md-h"># タスクの削除 — 作業ログ</span>
+
+<span class="md-h">## 方針ログ</span>
+
+<span class="md-h">### 実装方針</span>
+
+<span class="md-b">削除方式：一意なID指定（案B）</span>
+<span class="md-b">ID生成方法：Date.now()</span>
+
+<span class="md-h">### チームの判断</span>
+
+<span class="md-li">- 案A（インデックス指定）はシンプルだが、今後フィルタやソートを追加するとズレる</span>
+<span class="md-li">- 案B（ID指定）はIDを管理する手間が増えるが、削除対象が明確になる</span>
+<span class="md-li">- ID生成は Date.now() を採用。手入力での連打は考慮不要と判断した</span>
+<span class="md-li">- 確認ダイアログは不要。シンプルな即時削除とする</span>
+
+<span class="md-h">### 変更するファイル</span>
+
+<span class="md-li">- src/App.vue（tasks の型定義・addTask・deleteTask・template）</span></div>
+    </div>
+  </div>
+
+  <!-- STEP 4: 実装 -->
+  <div class="section">
+    <h2>STEP 4 — 実装する</h2>
+    <p>方針が決まったら実装に入る。以下のサンプルコードは<strong>参考実装</strong>。コピペで終わらせず、コメントを読みながら「なぜこう書くか」を理解すること。</p>
+
+    <div class="note-box">
+      <div class="note-box-label">変更のポイント（全4箇所）</div>
+      <p>① Taskの型定義を追加　② <code>tasks</code> の型を変更　③ <code>addTask</code> にIDを追加　④ <code>deleteTask</code> を新規追加＋templateを修正</p>
+    </div>
+
+    <h3>① Task型の定義を追加する</h3>
+    <p><code>tasks</code> の中身を「文字列」から「ID付きオブジェクト」に変える。まず型を定義する。</p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+      <pre><code><span class="cm">// タスク1件分のデータ構造</span>
+<span class="kw">interface</span> <span class="ty">Task</span> {
+  id:   <span class="ty">number</span>;  <span class="cm">// Date.now() をIDに使うので number 型</span>
+  text: <span class="ty">string</span>;  <span class="cm">// 画面に表示するタスク名</span>
+}</code></pre>
+    </div>
+
+    <h3>② tasks の型を変更する</h3>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+      <pre><code><span class="cm">// 変更前: const tasks = ref&lt;string[]&gt;([]);</span>
+<span class="cm">// 変更後: Task オブジェクトの配列に変更する</span>
+<span class="kw">const</span> tasks = <span class="fn">ref</span>&lt;<span class="ty">Task</span>[]&gt;([]);</code></pre>
+    </div>
+
+    <h3>③ addTask にID付与を追加する</h3>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+      <pre><code><span class="kw">const</span> <span class="fn">addTask</span> = () => {
+  <span class="kw">if</span> (newTask.value.<span class="fn">trim</span>() === <span class="str">""</span>) <span class="kw">return</span>;
+
+  tasks.value.<span class="fn">push</span>({
+    id:   <span class="ty">Date</span>.<span class="fn">now</span>(),         <span class="cm">// 追加：現在時刻をIDとして付与</span>
+    text: newTask.value.<span class="fn">trim</span>(), <span class="cm">// 変更：文字列ではなくオブジェクトで追加</span>
+  });
+
+  newTask.value = <span class="str">""</span>;
+};</code></pre>
+    </div>
+
+    <h3>④ deleteTask を追加する</h3>
+    <p><code>filter</code> は「条件に合うものだけを残す」メソッド。「対象IDと一致しないものだけを残す」＝「対象IDを削除する」になる。</p>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+      <pre><code><span class="kw">const</span> <span class="fn">deleteTask</span> = (targetId: <span class="ty">number</span>): <span class="ty">void</span> => {
+  <span class="cm">// targetId と一致しないタスクだけを残す = targetId を削除する</span>
+  tasks.value = tasks.value.<span class="fn">filter</span>((task: <span class="ty">Task</span>) => task.id !== targetId);
+};</code></pre>
+    </div>
+
+    <h3>⑤ template を修正する</h3>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+      <pre><code><span class="cm">&lt;!-- tasks が1件以上あるときだけリストを表示 --&gt;</span>
+&lt;<span class="kw">ul</span> v-if=<span class="str">"tasks.length &gt; 0"</span>&gt;
+  &lt;<span class="kw">li</span>
+    v-for=<span class="str">"task in tasks"</span>
+    :key=<span class="str">"task.id"</span>
+    class=<span class="str">"task-item"</span>
+  &gt;
+    <span class="cm">&lt;!-- task はオブジェクトなので .text でテキストを取り出す --&gt;</span>
+    &lt;<span class="kw">span</span>&gt;{{ task.text }}&lt;/<span class="kw">span</span>&gt;
+
+    <span class="cm">&lt;!-- 削除ボタンを押したタスクの id を deleteTask に渡す --&gt;</span>
+    &lt;<span class="kw">button</span> class=<span class="str">"delete-button"</span> @click=<span class="str">"deleteTask(task.id)"</span>&gt;削除&lt;/<span class="kw">button</span>&gt;
+  &lt;/<span class="kw">li</span>&gt;
+&lt;/<span class="kw">ul</span>&gt;
+
+&lt;<span class="kw">p</span> v-else class=<span class="str">"empty"</span>&gt;タスクがまだありません。&lt;/<span class="kw">p</span>&gt;</code></pre>
+    </div>
+
+    <h3>削除ボタンのCSS（参考）</h3>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+      <pre><code>.task-item {
+  display: flex;
+  justify-content: space-between; <span class="cm">/* テキスト左・ボタン右 */</span>
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.delete-button {
+  background: transparent;
+  border: 1px solid #ccc;
+  color: #888;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.82rem;
+}
+
+.delete-button:hover {
+  color: #ef4444;
+  border-color: #ef4444;
+  background: transparent;
+}</code></pre>
+    </div>
+
+    <div class="note-box">
+      <div class="note-box-label">動作確認チェック</div>
+      <p>① タスクを2〜3件追加する　② 真ん中のタスクだけ削除して、上下が残ることを確認する　③ 全件削除して「タスクがまだありません。」が表示されることを確認する</p>
+    </div>
+  </div>
+
+  <!-- STEP 5: 実装メモ -->
+  <div class="section">
+    <h2>STEP 5 — docs に実装メモを書く</h2>
+    <p>実装が終わったら、気づいたことや詰まった点を <code>docs/task-delete.md</code> に追記する。<strong>方針ログ＋実装メモが揃ったら最終報告。</strong></p>
+
+    <div class="report-box">
+      <div class="report-box-icon">🎯</div>
+      <div class="report-box-body">
+        <div class="report-box-label">ここでチューターに最終報告</div>
+        <p>方針ログ＋実装メモの2つが揃った状態でチューターに報告する。「どう実装したか」だけでなく「なぜそうしたか」が説明できれば完了。</p>
+      </div>
+    </div>
+
+    <h3>docs/task-delete.md — 実装メモのサンプル</h3>
+    <p>以下をベースに、<strong>自分たちが実際に詰まった点・気づいた点を書き足すこと。</strong></p>
+
+    <div class="md-wrap">
+      <div class="md-label">docs/task-delete.md（追記分）</div>
+      <div class="md-block">
+<span class="md-h">## 実装メモ</span>
+
+<span class="md-h">### 実際にやったこと</span>
+
+<span class="md-li">- Task インターフェースを追加し、tasks の型を Task[] に変更した</span>
+<span class="md-li">- addTask で push するオブジェクトに id: Date.now() を追加した</span>
+<span class="md-li">- deleteTask を filter で実装した</span>
+<span class="md-li">- template の :key を task.id に変更し、表示を task.text に修正した</span>
+<span class="md-li">- 削除ボタンに class="delete-button" を追加してスタイルを調整した</span>
+
+<span class="md-h">### 気づいたこと・詰まった点</span>
+
+<span class="md-li">- （ここに自分たちが詰まったことや気づいたことを書く）</span>
+<span class="md-li">- 例：filter の条件を逆にしてしまい全件削除になったが、!== の方向に直したら解決した</span>
+<span class="md-li">- 例：:key に index を使っていたのを task.id に変えたら警告が消えた</span>
+
+<span class="md-h">### 判断が必要だった箇所</span>
+
+<span class="md-li">- 確認ダイアログ：なし（即時削除）→ 仕様書に明記なかったためシンプルさ優先で決定</span>
+<span class="md-li">- ID生成方法：Date.now() → 手入力での連打は現実的でないと判断</span></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    コードが動いたことより、なぜそう実装したかを説明できることの方が大事。
+  </div>
+
+</div>
+
+<script>
+  function copyCode(btn) {
+    const pre = btn.nextElementSibling;
+    const text = pre.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = btn.textContent;
+      btn.textContent = 'コピー済み';
+      setTimeout(() => { btn.textContent = orig; }, 1200);
+    });
+  }
+</script>
+</body>
+</html>
