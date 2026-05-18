@@ -244,6 +244,43 @@
       color: #1a1a1a;
       border-color: #bbb;
     }
+
+    /* ===== PERSONA ===== */
+    .point-desc strong {
+      color: #1a1a1a;
+      font-weight: 600;
+    }
+
+    .persona-type {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .persona-type:first-of-type {
+      margin-top: 6px;
+      padding-top: 0;
+      border-top: none;
+    }
+
+    .hidden-need {
+      display: block;
+      background: #f6f2ff;
+      border-left: 3px solid #7c4dff;
+      border-radius: 0 4px 4px 0;
+      padding: 8px 12px;
+      margin-top: 8px;
+      font-size: 0.80rem;
+      color: #4a3080;
+      line-height: 1.7;
+    }
+
+    .hidden-need::before {
+      content: "真のニーズ　";
+      font-weight: 700;
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+    }
   </style>
 </head>
 
@@ -335,25 +372,68 @@
     <div class="section">
       <h2>このアプリを使っている人たち</h2>
       <div class="point-list">
+
+        <!-- 田中 誠一 -->
         <div class="point-item">
           <div class="point-icon">👤</div>
           <div class="point-body">
-            <div class="point-title">田中 誠一（総務部・40代）</div>
+            <div class="point-title">田中 誠一（総務部 係長・42歳）</div>
             <div class="point-desc">
-              依頼メールを送ってきた担当者。PCは毎日使うが、技術的なことはよくわからない。「いい感じにしてほしい」「よしなにお願いします」が口癖。要望は現場の声をそのまま転記していることが多い。
+              依頼メールを送ってきたベンダー窓口担当。PCは毎日使うが、技術的なことはわからない。<br>
+              <strong>日常の仕事：</strong>会議5〜6本/日、メール100通以上/日。朝は当日タスクをExcelで確認し、夕方に部長へ進捗を口頭報告している。<br>
+              <strong>困っていること：</strong>チームの進捗が自分には見えない。確認のたびにSlackで個別に聞いており、部長報告の直前に状況を把握していないことがある。<br>
+              <strong>口癖：</strong>「いい感じにしてほしい」「よしなに」「うちは技術的なことはわからないので」
+              <span class="hidden-need">「チームが自走していて、自分がいつでも状況を把握できる状態」を作りたい。「いい感じ」の言葉の裏には、部長に説明できる透明性と、個別に聞き回る手間の削減が含まれている。</span>
             </div>
           </div>
         </div>
 
+        <!-- 総務部メンバー -->
         <div class="point-item">
           <div class="point-icon">👥</div>
           <div class="point-body">
-            <div class="point-title">総務部のメンバー（10名程度）</div>
+            <div class="point-title">総務部のメンバー（10名・3タイプ）</div>
             <div class="point-desc">
-              実際にアプリを日常的に使う人たち。タスクの登録・確認が主な用途。「なんか使いづらい」とは言うが、具体的に何が問題かは言語化されていない。スマホよりPCで使うことが多い。
+              実際にアプリを日常的に使う人たち。タスクの登録・確認が主な用途。PCメイン利用。「なんか使いづらい」とは言うが、具体的に何が問題かは言語化されていない。
+
+              <div class="persona-type">
+                <strong>Aタイプ：鈴木さん（入社12年・ベテラン）</strong><br>
+                今のやり方で十分だと思っている。新機能が増えるたびに「また覚えなきゃ」と感じる。タスクは多いが自分の頭で管理できている。<br>
+                困ること：締め切り前日に「あれどうなった？」と聞かれること。変更への抵抗感が強く、操作が変わると使うのをやめる人もいる。
+                <span class="hidden-need">「自分のペースで使えて、余計な通知や変化が少ない」こと。機能追加より、今使っている部分が壊れないことを重視している。</span>
+              </div>
+
+              <div class="persona-type">
+                <strong>Bタイプ：中村さん（入社4年・中堅）</strong><br>
+                効率化には前向きだが、使いにくいものに振り回されたくない。タスクが積み重なると何から手をつけるか迷う。<br>
+                困ること：優先度が可視化されていないので、締め切りが近い重要なタスクを後回しにしてしまう。
+                <span class="hidden-need">「今日やるべきことが、アプリを開いた瞬間にわかる」状態。自動で並び替えてほしいのではなく、自分で決めた優先度を見失わないことが本質。</span>
+              </div>
+
+              <div class="persona-type">
+                <strong>Cタイプ：井上さん（入社2年・若手）</strong><br>
+                アプリ自体への不満は少ないが、チームのタスク状況が見えないため、手伝えるタイミングがわからない。<br>
+                困ること：「あのタスク誰がやってるんだろう」と思っても、先輩に聞きにくい。
+                <span class="hidden-need">チームの状況を察知して「自分から動ける」ようにしたい。機能要望というより、チームの中での自分の動き方への不安が根底にある。</span>
+              </div>
             </div>
           </div>
         </div>
+
+        <!-- 山田 部長 -->
+        <div class="point-item">
+          <div class="point-icon">🏢</div>
+          <div class="point-body">
+            <div class="point-title">山田 部長（総務部長・54歳）</div>
+            <div class="point-desc">
+              田中係長の上司。アプリを直接使うことはないが、チーム全体のパフォーマンスに関心がある。ITツールは苦手で、Excelと電話が主な仕事道具。<br>
+              <strong>関心事：</strong>月次報告に遅れがないか、トラブル対応が抜け漏れなく回っているか。<br>
+              <strong>口癖：</strong>「それ、エビデンス残ってる？」「前回も同じことがあったよな」
+              <span class="hidden-need">「何かあったときに、誰が何をやっていたか追える状態」を求めている。アプリの使いやすさではなく、説明責任の担保と可視性が本質的な関心。田中係長を通じて間接的にこの要求がシステムに入り込んでいる。</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
